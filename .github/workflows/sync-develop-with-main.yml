@@ -1,0 +1,23 @@
+name: Sync develop with main
+
+on:
+  push:
+      branches:
+        - main
+  
+jobs:
+  sync-branch:
+    name: Update develop branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync Branch
+        uses: connor-baer/action-sync-branch@v1.1.0
+        with:
+          branch: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+          force: false
