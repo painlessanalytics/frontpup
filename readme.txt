@@ -34,6 +34,12 @@ Yes, you need an AWS account with CloudFront setup for your website.
 
 == Changelog ==
 
+= 1.1 =
+* Added welcome page for the wp-admin
+* Added clear cache settings page
+* Reorganized admin class, new base class for future settings pages
+* Moved views to subfolder of admin folder
+
 = 1.0 =
 * First version of this plugin
 
