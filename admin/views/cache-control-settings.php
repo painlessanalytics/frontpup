@@ -157,7 +157,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 </div><!-- end of frontpup-ttl-input-container -->
 <style>
 .frontpup-settings .recommended {
-    background-color: #0073aa;
+    background-color: #135e96;
+    border-color: #135e96;
     color: #fff;
     font-size: 0.75em;
     font-weight: bold;

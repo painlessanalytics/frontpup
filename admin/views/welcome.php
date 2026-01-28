@@ -36,8 +36,8 @@ if( !empty($_SERVER['HTTP_X_AMZ_CF_ID'])) {
 <div class="frontpup-mt-4 frontpup-bl">
   <h3 class="frontpup-mb-0"><?php echo esc_html( __('Configure FrontPup', 'frontpup') ); ?></h3>
   <ul>
-    <li><a href="<?php echo esc_attr(admin_url('admin.php?page=frontpup-cache-settings')); ?>"><?php echo esc_html( __('Cache Settings', 'frontpup') ); ?></a></li>
-    <li><a href="<?php echo esc_attr(admin_url('admin.php?page=frontpup-clear-cache')); ?>"><?php echo esc_html( __('Clear Cache Settings', 'frontpup') ); ?></a></li>
+    <li><strong><a href="<?php echo esc_attr(admin_url('admin.php?page=frontpup-cache-settings')); ?>"><?php echo esc_html( __('Cache Settings', 'frontpup') ); ?></a></strong></li>
+    <li><strong><a href="<?php echo esc_attr(admin_url('admin.php?page=frontpup-clear-cache')); ?>"><?php echo esc_html( __('Clear Cache Settings', 'frontpup') ); ?></a></strong></li>
   </ul>
 </div>
 
