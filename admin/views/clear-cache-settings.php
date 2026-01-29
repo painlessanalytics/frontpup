@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 <div id="frontpup-credentials-input-container" style="<?php echo ( isset( $settings['clear_cache_enabled'] ) && $settings['clear_cache_enabled'] ) ? '' : 'display:none;'; ?>">
 <table class="form-table" id="frontpup-credentials">
   <tr class="csd-credentials">
-    <th scope="row">CloudFront Distribution ID</th>
+    <th scope="row"><?php echo esc_html__('CloudFront Distribution ID', 'frontpup'); ?></th>
     <td>
       <input type="text"
               name="<?php echo esc_attr($this->settings_key); ?>[distribution_id]"
@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   </tr>
 
   <tr>
-    <th scope="row">AWS Credentials</th>
+    <th scope="row"><?php echo esc_html__('Credentials Method', 'frontpup'); ?></th>
     <td>
       <fieldset>
         <label>

@@ -39,6 +39,8 @@ Yes, you need an AWS account with CloudFront setup for your website.
 * Added clear cache settings page
 * Reorganized admin class, new base class for future settings pages
 * Moved views to subfolder of admin folder
+* Added FrontPup admin bar menu bar option with "Clear CloudFront Cache" in sub menu (Made it a sub menu so you have to click twice to avoid accidental cache clearing)
+* Ajax code for clearing cache created. For now only users who can manage settings can clear the cache (to be customizable in future versions)
 
 = 1.0 =
 * First version of this plugin
