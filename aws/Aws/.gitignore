@@ -3,13 +3,21 @@
 
 # But not these files...
 !.gitignore
+!CloudFront/
 !CloudFront/**
+!Credentials/
 !Credentials/**
+!Signature/
 !Signature/**
+!Handler/
 !Handler/**
+!Api/
 !Api/**
+!Exception/
 !Exception/**
+
 # etc...
+!*.php
 
 # ...even if they are in subdirectories
-!*/
+#!*/
