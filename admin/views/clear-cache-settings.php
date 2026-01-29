@@ -140,7 +140,6 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
     </td>
   </tr>
 </table>
-</div>
 
 <p style="margin-bottom: 0;"><label>
   <input type="checkbox"
@@ -150,6 +149,8 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
   <?php echo esc_html__('Test credentials, clear cache upon saving', 'frontpup'); ?>
 </label>
 </p>
+</div>
+
 <script>
 function frontpup_select_credentials_mode() {
     var mode = document.querySelector('input[name="<?php echo esc_js($this->settings_key); ?>[credentials_mode]"]:checked').value;

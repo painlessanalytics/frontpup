@@ -1,0 +1,15 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!CloudFront/**
+!Credentials/**
+!Signature/**
+!Handler/**
+!Api/**
+!Exception/**
+# etc...
+
+# ...even if they are in subdirectories
+!*/

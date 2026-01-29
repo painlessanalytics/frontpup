@@ -4,8 +4,8 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 5.5
 Tested up to: 6.9
-Stable tag: 1.0
-Requires PHP: 7.0
+Stable tag: 1.1
+Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
