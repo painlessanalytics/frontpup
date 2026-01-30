@@ -1,6 +1,6 @@
 <?php
 /**
- * Clear Cache Admin Class
+ * Welcome Admin Class
  */
  
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
