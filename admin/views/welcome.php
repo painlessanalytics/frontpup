@@ -1,6 +1,6 @@
 <?php
 /** 
- * Clear Cache Settings View
+ * Welcome Page View
  * 
  * $this = Frontpup_Admin object
  * $settings = array of current settings
