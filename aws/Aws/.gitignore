@@ -16,3 +16,7 @@
 !Exception/
 !Exception/**
 !*.php
+!data/
+!data/*.php
+!data/cloudfront/
+!data/cloudfront/**
