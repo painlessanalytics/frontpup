@@ -4,11 +4,14 @@
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+require_once plugin_dir_path( __FILE__ ) . 'admin/cache-control.class.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/clear-cache.class.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/welcome.class.php';
+
 class FrontPup_Admin {
 
     private static $instance = null;
-    private $settings_key = 'frontpup_plugin_settings';
-    private $settings = [];
+    private $admin_views = [];
 
     /**
      * Singleton instance
@@ -24,249 +27,176 @@ class FrontPup_Admin {
      * Constructor
      */
     private function __construct() {
-        $this->settings = get_option( $this->settings_key, [] );
+        // Create the admin views and their controller classes
+        $this->admin_views['welcome'] = new FrontPup_Admin_Welcome(); // __('Welcome', 'frontpup') );
+        $this->admin_views['cache-control'] = new FrontPup_Admin_Cache_Control(); // __('Cache Control Settings', 'frontpup') );
+        $this->admin_views['clear-cache'] = new FrontPup_Admin_Clear_Cache(); // __('Clear Cache Settings', 'frontpup') );
+       
+        // Admin hooks
+        add_action( 'admin_menu', [$this, 'admin_menu'] );
+        add_action( 'admin_init', [$this, 'admin_init'] );
+        add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 801 );
 
-        add_action( 'admin_menu', [ $this, 'register_menu' ] );
-        add_action( 'admin_init', [ $this, 'register_settings' ] );
+        // Clear cache ajax action
+        add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue_scripts'] );
+        add_action( 'wp_ajax_frontpup_clear_cache_action', [$this, 'wp_ajax_frontpup_clear_cache_action']);
     }
 
     /**
      * Add top-level admin menu
      */
-    public function register_menu() {
+    public function admin_menu() {
 
-        add_options_page(
-            'FrontPup Settings',       // Page title
-            'FrontPup',                      // Menu title
-            'manage_options',                 // Capability required to access
-            'frontpup-plugin',        // Menu slug
-            [ $this, 'settings_page' ]  // Callback function to render the page content
+        $icon_url = 'dashicons-cloud-upload';
+        //$icon_url = plugin_dir_url( __FILE__ ) . 'images/frontpup-icon-16.png';
+        //echo $icon_url;
+
+        add_menu_page(
+            'Welcome',
+            __('FrontPup', 'frontpup'),
+            'manage_options',
+            'frontpup-plugin', // menu slug
+            [$this->admin_views['welcome'], 'view'],
+            $icon_url
+        );
+
+        add_submenu_page(
+            'frontpup-plugin',
+            __('Welcome', 'frontpup'),
+            __('Welcome', 'frontpup'),
+            'manage_options',
+            'frontpup-plugin', // menu slug
+            [$this->admin_views['welcome'], 'view']
+        );
+
+        add_submenu_page(
+            'frontpup-plugin',
+            __('Cache Settings', 'frontpup'),
+            __('Cache Settings', 'frontpup'),
+            'manage_options',
+            'frontpup-cache-settings', // menu slug
+            [$this->admin_views['cache-control'], 'view']
+        );
+
+        add_submenu_page(
+            'frontpup-plugin',
+            __('Clear Cache Settings', 'frontpup'),
+            __('Clear Cache Settings', 'frontpup'),
+            'manage_options',
+            'frontpup-clear-cache', // menu slug
+            [$this->admin_views['clear-cache'], 'view']
         );
     }
 
     /**
      * Register plugin settings
      */
-    public function register_settings() {
+    public function admin_init() {
+        // Set the page titles
+        $this->admin_views['welcome']->set_page_title( __('Welcome to FrontPup', 'frontpup') );
+        $this->admin_views['cache-control']->set_page_title( __('Cache Settings', 'frontpup') );
+        $this->admin_views['clear-cache']->set_page_title( __('Clear Cache Settings', 'frontpup') );
 
-        register_setting(
-            'frontpup_plugin_settings_group',
-            $this->settings_key,
-            [ 'sanitize_callback' => [ $this, 'sanitize_settings' ] ]
+        // Register settings for each admin view
+        foreach( $this->admin_views as $view ) {
+            $view->register_settings();
+        }
+    }
+
+    /**
+     * Add admin bar menu
+     * Include a drop down menu in the admin bar for quick access
+     */
+    public function admin_bar_menu( $wp_admin_bar ) {
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        // Return if the enable clear cache is not set
+        $settings = get_option( 'frontpup_clear_cache', [] );
+        if( empty($settings['clear_cache_enabled']) ) {
+            return;
+        }
+
+        $args = array(
+            'id'    => 'frontpup_admin_menu',
+            'title' => __('FrontPup', 'frontpup'),
+            'href'  => '',
+            'meta'  => array( 'class' => 'frontpup-admin-bar-menu' )
         );
-    }
- 
-    /**
-     * Settings content HTML
-     */
-    public function settings_content( ) {
-        // Set default values if not set
-        $settings = $this->settings;
-        if( !isset( $settings['custom_smaxage_enabled'] ) ) {
-            $settings['custom_smaxage_enabled'] = 0; // Default value
-        }
-        if( !isset( $settings['smaxage'] ) ) {
-            $settings['smaxage'] = 31536000; // Default value
-        }
-        if( !isset( $settings['maxage'] ) ) {
-            $settings['maxage'] = 31536000; // Default value
-        }
-        if( !isset( $settings['cachecontrol'] ) ) {
-            $settings['cachecontrol'] = 0; // Default value
-        }
-?>
-<p><?php echo esc_html(__('The caching settings control how your pages are cached by CloudFront.', 'frontpup')); ?></p>
-<p><?php echo esc_html(__('The following settings only apply to public pages.', 'frontpup')); ?></p>
-<p><?php echo esc_html(__('Enable the options below if your `Minimum TTL` cache policy setting in CloudFront is set to 0 seconds.', 'frontpup')); ?></p>
-<h2><?php echo esc_html(__('Page Caching Settings', 'frontpup')); ?></h2>
-<table class="form-table permalink-structure" role="presentation">
-<tbody>
-<tr>
-	<th scope="row"><?php echo esc_html(__( 'Cache-Control', 'frontpup' )); ?></th>
-	<td>
-		<fieldset class="structure-selection">
-			<legend class="screen-reader-text"><?php echo 'test'; ?></legend>
-			<div class="row">
-				<input id="cachecontrol-input-none"
-					name="<?php echo esc_attr($this->settings_key); ?>[cachecontrol]" aria-describedby="cachecontrol-input-none-description"
-					type="radio" value="0"
-					<?php checked( $settings['cachecontrol'], 0 ); ?>
-				/>
-				<div>
-                    <label for="cachecontrol-input-none"><?php esc_html( 'None', 'frontpup' ); ?></label>
-					<p id="cachecontrol-input-none-description">
-						<?php echo esc_html(__( 'No Cache-Control header is added.', 'frontpup' )); ?>
-					</p>
-				</div>
-			</div><!-- .row -->
+        $wp_admin_bar->add_node( $args );
 
-            <legend class="screen-reader-text"><?php echo 'test'; ?></legend>
-			<div class="row">
-				<input id="cachecontrol-input-nocache"
-					name="<?php echo esc_attr($this->settings_key); ?>[cachecontrol]" aria-describedby="cachecontrol-input-nocache-description"
-					type="radio" value="1"
-					<?php checked( $settings['cachecontrol'], 1 ); ?>
-				/>
-				<div>
-                    <label for="cachecontrol-input-nocache"><?php esc_html( 'No-cache', 'frontpup' ); ?></label>
-					<p id="cachecontrol-input-nocache-description">
-						<code><?php echo esc_html(__( 'Cache-Control: no-cache', 'frontpup' )); ?></code> 
-					</p>
-                    <p style="margin-top:10px;">
-                        <?php echo esc_html(__( 'No-cache headers.', 'frontpup' )); ?>
-                    </p>
-				</div>
-			</div><!-- .row -->
-
-            <legend class="screen-reader-text"><?php echo 'test'; ?></legend>
-			<div class="row">
-				<input id="cachecontrol-input-browser"
-					name="<?php echo esc_attr($this->settings_key); ?>[cachecontrol]" aria-describedby="cachecontrol-input-browser-description"
-					type="radio" value="2"
-					<?php checked( $settings['cachecontrol'], 2 ); ?>
-                    
-				/>
-				<div>
-                    <label for="cachecontrol-input-browser"><?php esc_html( 'Browser Cache Only', 'frontpup'  ); ?></label>
-					<p id="cachecontrol-input-browser-description">
-						<code><?php echo esc_html(__( 'Cache-Control: private, max-age=VALUE', 'frontpup' )); ?></code> 
-					</p>
-                    <p style="margin-top:10px;">
-                        <?php echo esc_html(__( 'CloudFront will not cache content, only the browser..', 'frontpup' )); ?>
-                    </p>
-				</div>
-			</div><!-- .row -->
-
-            <legend class="screen-reader-text"><?php echo 'test'; ?></legend>
-			<div class="row">
-				<input id="cachecontrol-input-browser-cloudfront"
-					name="<?php echo esc_attr($this->settings_key); ?>[cachecontrol]" aria-describedby="cachecontrol-input-browser-cloudfront-description"
-					type="radio" value="3"
-					<?php checked( $settings['cachecontrol'], 3 ); ?>
-				/>
-				<div>
-                    <label for="cachecontrol-input-browser-cloudfront"><?php esc_html( 'Browser and CloudFront Cache', 'frontpup' ); ?></label>
-					<p id="cachecontrol-input-browser-cloudfront-description">
-                        <code><?php echo esc_html(__( 'Cache-Control: public, max-age=VALUE', 'frontpup' )); ?></code>
-					</p>
-                    <p style="margin-top:10px;">
-                        <?php echo esc_html(__( 'CloudFront and browser caching headers are added.', 'frontpup' )); ?>
-                    </p>
-				</div>
-			</div><!-- .row -->
-</fieldset><!-- .structure-selection -->
-	</td>
-</tr>
-</tbody>
-</table>
-
-<div id="frontpup-ttl-input-container">
-<table class="form-table permalink-structure" role="presentation">
-<tbody>
-<tr>
-	<th scope="row"><?php echo esc_html(__( 'Max Age', 'frontpup' )); ?></th>
-	<td>
-        <p>
-            <input name="<?php echo esc_attr($this->settings_key); ?>[maxage]" id="frontpup-maxage"
-                type="number" value="<?php echo esc_attr( $settings['maxage'] ); ?>"
-                min="0" max="31536000"
-                aria-describedby="permalink-custom" class="medium-text"
-            />
-        </p>
-        <p>
-            <?php echo esc_html(__( 'Specify the max age (in seconds) to cache content.', 'frontpup' )); ?>
-        </p>
-        <p id="frontpup-smaxage-checkbox">
-        <label>
-            <input 
-                type="hidden" 
-                name="<?php echo esc_attr($this->settings_key); ?>[custom_smaxage_enabled]"
-                value="0" />
-            <input
-                type="checkbox"
-                name="<?php echo esc_attr($this->settings_key); ?>[custom_smaxage_enabled]" 
-                value="1"
-                onclick="document.getElementById('frontpup-smaxage-input-container').style.display = this.checked ? '' : 'none';"
-                <?php checked( isset( $settings['custom_smaxage_enabled'] ) && $settings['custom_smaxage_enabled'] ); ?> 
-            />
-            <?php echo esc_html(__( 'Set a specific max age for CloudFront caching.', 'frontpup' )); ?>
-            
-        </label>
-        </p>
-	</td>
-</tr>
-</tbody>
-</table>
-<div id="frontpup-smaxage-input-container" style="<?php echo ( isset( $settings['custom_smaxage_enabled'] ) && $settings['custom_smaxage_enabled'] ) ? '' : 'display:none;'; ?>">
-<table class="form-table" role="presentation">
-<tbody>
-<tr>
-	<th scope="row"><?php echo esc_html(__( 'CloudFront Max Age', 'frontpup' )); ?></th>
-	<td>
-        <p>
-            <input name="<?php echo esc_attr($this->settings_key); ?>[smaxage]" id="frontpup-smaxage"
-                type="number" value="<?php echo esc_attr( $settings['smaxage'] ); ?>"
-                min="0" max="31536000"
-                aria-describedby="permalink-custom" class="medium-text"
-            />
-        </p>
-        <p>
-            <?php echo esc_html(__( 'Specify the max age (in seconds) for CloudFront to cache content.', 'frontpup' )); ?>
-        </p>
-        <p>
-            <?php echo esc_html(__( 'Adds s-maxage=VALUE to Cache-Control header.', 'frontpup' )); ?>
-        </p>
-    </td>
-</tr>
-</tbody>
-</table>
-</div><!-- end of frontpup-smaxage-input-container -->
-</div><!-- end of frontpup-ttl-input-container -->
-<?php
+        // Submenu: Cache Settings
+        $url = admin_url( 'admin.php?action=frontpup_clear_cache' );
+        $nonceUrl = wp_nonce_url( $url, 'frontpup_clear_cache', 'frontpup_clear_cache_nonce' );
+        $args = array(
+            'id'    => 'frontpup-clear-cache',
+            'title' => __('Clear CloudFront Cache', 'frontpup'),
+            'href'  => '#',
+            'parent'=> 'frontpup_admin_menu',
+        );
+        $wp_admin_bar->add_node( $args );
     }
 
     /**
-     * Sanitize settings before saving
+     * Admin enqueue scripts
      */
-    public function sanitize_settings( $input ) {
-        $output = [];
+    public function admin_enqueue_scripts( $hook ) {
 
-        // boolean values
-        foreach ( ['custom_smaxage_enabled'] as $field ) {
-            $output[$field] = isset( $input[$field] ) ? boolval( $input[$field] ) : 0;
+        // Determine if we have the clear cache enabled
+        $settings = get_option( 'frontpup_clear_cache', [] );
+        if( empty($settings['clear_cache_enabled']) ) {
+            return;
         }
 
-        // Numeric values
-        foreach ( ['maxage', 'smaxage', 'cachecontrol'] as $field ) {
-            if ( isset( $input[$field] ) ) {
-                $output[$field] = intval( $input[$field] );
-            } else {
-                $output[$field] = 0;
-            }
-        }
+        $translation_array = array(
+            'dismiss' => __( 'Dismiss', 'frontpup' ),
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'security_nonce' => wp_create_nonce('frontpup_clear_cache_nonce'),
+        );
 
-        return $output;
+        wp_enqueue_script( 'frontpup-clear-cache-script', plugin_dir_url( __FILE__ ) . 'admin/js/clear-cache.js', [], FRONTPUP_VERSION, true );
+        wp_localize_script( 'frontpup-clear-cache-script', 'frontpupClearCache', $translation_array );
     }
 
     /**
-     * Settings page HTML
+     * WP AJax action for clearing cache
      */
-    public function settings_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php echo esc_html(__('FrontPup, your CloudFront companion', 'frontpup')); ?></h1>
+    public function wp_ajax_frontpup_clear_cache_action() {
 
-            <form method="post" action="options.php">
-                <?php
-                settings_fields( 'frontpup_plugin_settings_group' );
-                do_settings_sections( 'frontpup-plugin' );
-                $this->settings_content();
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
+        $settings = get_option( 'frontpup_clear_cache', [] );
+        if( empty($settings['clear_cache_enabled']) ) {
+            wp_send_json_error( __( 'This option is not available.', 'frontpup' ) );
+            return;
+        }
+        
+        // Check user capabilities
+        if ( !current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( __( 'You do not have sufficient permissions to access this action.', 'frontpup' ) );
+            return;
+        }
+
+        // Check nonce
+        if( !check_ajax_referer( 'frontpup_clear_cache_nonce', 'nonce', false ) ) {
+            wp_send_json_error( __( 'Invalid security token sent.', 'frontpup' ) );
+            return;
+        }
+
+        // Perform cache clearing
+        $FrontPupObj = FrontPup::get_instance();
+        $clearCacheObj = $FrontPupObj->get_clear_cache_instance();
+        $result = $clearCacheObj->clear_cache();
+
+        if ( $result === false ) {
+            $error_message = sprintf( '%s.', $clearCacheObj->get_last_error() == '' ? __( 'Unknown error occurred', 'frontpup' ) : $clearCacheObj->get_last_error() );
+            wp_send_json_error( __( 'Error occurred while clearing cache: ', 'frontpup' ) . $error_message );
+            return;
+        } else {
+            wp_send_json_success( __( 'CloudFront cache invalidation request completed successfully.', 'frontpup' ) );
+        }
     }
 }
 
 FrontPup_Admin::get_instance();
+
+// eof

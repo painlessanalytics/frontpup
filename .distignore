@@ -2,11 +2,12 @@
 /.git
 /.github
 /node_modules
-
 .distignore
 .gitignore
+/aws/Aws/.gitignore
 /.*
 /composer.json
 /composer.lock
 /package-lock.json
 /package.json
+/CHANGELOG.md

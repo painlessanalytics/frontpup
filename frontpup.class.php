@@ -121,6 +121,18 @@ class FrontPup {
             }
         }
     }
+
+    public function get_clear_cache_instance( $clearCacheSettings = [] ) {
+        require_once plugin_dir_path( __FILE__ ) . 'clear-cache.class.php';
+        if( empty($clearCacheSettings) ) {
+            $clearCacheSettings = get_option( 'frontpup_clear_cache', [] ); // Clear cache settings
+        }
+        
+        if( empty($clearCacheSettings) ) {
+            return null;
+        }
+        return new FrontPup_Clear_Cache( $clearCacheSettings );
+    }
 };
 
 // eof
