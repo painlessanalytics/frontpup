@@ -137,6 +137,6 @@ class FrontPup_Clear_Cache {
   public function get_result() {
     return $this->result;
   }
-
 }
 
+// eof

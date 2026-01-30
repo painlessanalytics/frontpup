@@ -4,15 +4,15 @@
  *
  * @package           FrontPup
  * @author            Painless Analytics
- * @copyright         2025 Painless Analytics
+ * @copyright         2026 Painless Analytics
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name:       FrontPup
  * Plugin URI:        https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
- * Description:       FrontPup, your CloudFront companion - optimize your CloudFront distribution for your WordPress website.
+ * Description:       FrontPup, your CloudFront companion - Clear cache and optimize your CloudFront distribution for your WordPress website.
  * Version:           1.1
- * Requires at least: 5.5
+ * Requires at least: 6.0
  * Tested up to:      6.9
  * Requires PHP:      8.1
  * Author:            Painless Analytics

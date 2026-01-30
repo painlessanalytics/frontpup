@@ -2,14 +2,14 @@
 Contributors: painlessanalytics, amandato
 Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
 Tags: cloudfront, aws, cdn, amazon, lightsail
-Requires at least: 5.5
+Requires at least: 6.0
 Tested up to: 6.9
 Stable tag: 1.1
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Your AWS CloudFront companion. Clear Cache and optimize Cache-Control headers within WordPress.
+Your AWS CloudFront companion. Clear cache and optimize your CloudFront distribution for your WordPress website
 
 == Description ==
 
@@ -17,9 +17,13 @@ Welcome to FrontPup, your CloudFront companion.
 
 FrontPup allows you to maximize your WordPress website using the AWS CloudFront Content Delivery Network (CDN).
 
+== REQUIREMENTS ==
+
+You __must__ be using the Amazon Web Services (AWS) [CloudFront](https://aws.amazon.com/cloudfront/) service to utilize this plugin.
+
 == FrontPup Features ==
 
-* Clear CloudFront Cache (Invalidate)
+* Clear CloudFront Cache (creates an Invalidation request)
 * Set no-cache headers for all pages (great for development or testing)
 * Set public and private Cache-Control headers for caching in CloudFront and Browsers
 * Set separate max-age (browser) and s-maxage (CloudFront) cache duration values
@@ -47,14 +51,14 @@ You should achieve a grade of "A" on [Qualys SSL Server Test](https://www.ssllab
 
 * **Global Reach** with over 750 PoPs plus over 1,100 PoPs within ISP networks
 * **High Availability**, can serve cached content when site is down
-* **Cost Efficiency**, can be cost-effective, especially for websites with high traffic with their new flat rate plans
+* **Cost Efficiency**, can be cost-effective, especially for websites with high traffic with the new [CloudFront flat-rate pricing plans](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/flat-rate-pricing-plan.html)
 
 **Technology**
 
-* **IPv6**, a superior protocol to IPv4 and in some regions of the world the only protocol that is available
-* **HTTP/2 and HTTP/3**, improve web performance through faster loading speeds, enhanced security, and better resource handling
+* **IPv6**, a superior protocol to IPv4 and in some regions of the world is the only protocol that is available
+* **HTTP/2 and HTTP/3** improve web performance through faster loading speeds, enhanced security, and better resource handling
 * **Gzip and Brotli compression**, smaller file sizes improve application performance by delivering your content faster to visitors
-* **Multi-Proxy**, route specific path patterns to other web applications easily by adding additional "Origins", allowing you to host more than WordPress with the same hostname
+* **Multi-Proxy**, route specific path patterns to other web applications easily by adding additional "Origins", allowing you to host more than just WordPress with the same hostname
 
 Learn more about [AWS CloudFront](https://aws.amazon.com/cloudfront/).
 
@@ -101,7 +105,7 @@ There are many ways to host a WordPress website on AWS. Here is quick list.
 * ECS Tasks - Run Docker containers using the AWS Elastic Container Service
 * EKS - Run WordPress on AWS Elastic Kubernetes Service
 
-There are thousands of formulas online that explain how to host WordPress on AWS. It comes down to the architecture you want to use and how much complexity you want with managing the servers.
+There are thousands of formulas online that explain how to host WordPress on AWS. The method you pick comes down to the architecture you want to use and how much complexity you want with managing your website.
 
 == Screenshots ==
 
@@ -113,11 +117,16 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 
 == Changelog ==
 
-The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup)
+The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
-Changelog:
+Changelog
 
 = 1.1 =
+
+Released: 2026-01-30
+
+Clear cache functionality added.
+
 * Added welcome page for the wp-admin
 * Added clear cache settings page
 * Reorganized admin class, new base class for future settings pages
@@ -126,7 +135,12 @@ Changelog:
 * Ajax code for clearing cache created. For now only users who can manage settings can clear the cache (to be customizable in future versions)
 
 = 1.0 =
+
+Released: 2026-01-08
+
 * First version of this plugin
+
+The entire changelog is available on GitHub: [https://github.com/painlessanalytics/frontpup/blob/main/CHANGELOG.md](https://github.com/painlessanalytics/frontpup/blob/main/CHANGELOG.md)
 
 == Upgrade Notice ==
 
