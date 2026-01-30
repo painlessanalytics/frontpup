@@ -35,8 +35,7 @@ class FrontPup_Admin_Clear_Cache extends FrontPup_Admin_Base {
 
       $FrontPupObj = FrontPup::get_instance();
       $clearCacheObj = $FrontPupObj->get_clear_cache_instance( $new_value );
-      // $result = $clearCacheObj->clear_cache();
-      $result = true;
+      $result = $clearCacheObj->clear_cache();
 
       $errorMessage = '';
       if( $result === false ) {
