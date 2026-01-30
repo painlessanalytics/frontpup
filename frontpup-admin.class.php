@@ -192,7 +192,7 @@ class FrontPup_Admin {
             wp_send_json_error( __( 'Error occurred while clearing cache: ', 'frontpup' ) . $error_message );
             return;
         } else {
-            wp_send_json_success( __( 'Cache cleared successfully.', 'frontpup' ) );
+            wp_send_json_success( __( 'CloudFront cache invalidation request completed successfully.', 'frontpup' ) );
         }
     }
 }

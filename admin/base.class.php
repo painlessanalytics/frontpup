@@ -50,6 +50,7 @@ class FrontPup_Admin_Base {
   public function register_settings() {
     if( !empty($this->settings_key) ) {
       register_setting( $this->settings_key . '_group', $this->settings_key, [ $this, 'sanitize_settings' ] );
+      add_action('update_option_' . $this->settings_key, [ $this, 'update_option' ], 10, 2);
     }
   }
 
@@ -82,7 +83,15 @@ class FrontPup_Admin_Base {
       }
     }
 
+    $output['last_update'] = time(); // Update timestamp (forces data to be saved even if no other changes made)
     return $output;
+  }
+
+  /**
+   * Update option, when data saved to database
+   */
+  public function update_option($old_value, $new_value) {
+    
   }
 
   /**
