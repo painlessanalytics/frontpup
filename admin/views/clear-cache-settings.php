@@ -13,12 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     <th scope="row"><?php echo esc_html__('Clear Cache', 'frontpup'); ?></th>
     <td>
       <label>
-        <input type="checkbox"
-                id="csd_enable_feature"
-                name="<?php echo esc_attr($this->settings_key); ?>[clear_cache_enabled]"
-                value="1"
-                onclick="document.getElementById('frontpup-credentials-input-container').style.display = this.checked ? '' : 'none';"
-                <?php checked( isset( $settings['clear_cache_enabled'] ) && $settings['clear_cache_enabled'] ); ?>
+        <input
+          type="checkbox"
+          id="csd_enable_feature"
+          name="<?php echo esc_attr($this->settings_key); ?>[clear_cache_enabled]"
+          value="1"
+          onclick="document.getElementById('frontpup-credentials-input-container').style.display = this.checked ? '' : 'none';"
+          <?php checked( isset( $settings['clear_cache_enabled'] ) && $settings['clear_cache_enabled'] ); ?>
         />
         <?php echo esc_html__('Enable Clear Cache', 'frontpup'); ?>
       </label>
@@ -34,11 +35,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <tr class="csd-credentials">
     <th scope="row"><?php echo esc_html__('CloudFront Distribution ID', 'frontpup'); ?></th>
     <td>
-      <input type="text"
-              name="<?php echo esc_attr($this->settings_key); ?>[distribution_id]"
-              value="<?php echo esc_attr($settings['distribution_id'] ?? ''); ?>"
-              placeholder=""
-              class="regular-text"
+      <input
+        type="text"
+        name="<?php echo esc_attr($this->settings_key); ?>[distribution_id]"
+        value="<?php echo esc_attr($settings['distribution_id'] ?? ''); ?>"
+        placeholder=""
+        class="regular-text"
 
       />
       <p>
@@ -52,11 +54,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     <td>
       <fieldset>
         <label>
-          <input type="radio"
-                  name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
-                  value="policy"
-                  <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'policy' ); ?>
-                  onclick="frontpup_select_credentials_mode();"
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
+            value="policy"
+            <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'policy' ); ?>
+            onclick="frontpup_select_credentials_mode();"
           />
           <?php echo esc_html__('IAM Role assigned to EC2 Instances, ECS tasks, and EKS pods', 'frontpup'); ?>
           <span class="recommended"><?php echo esc_html('Recommended', 'frontpup'); ?></span>
@@ -67,11 +70,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
         <br />
 
         <label>
-          <input type="radio"
-                  name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
-                  value="wpconfig"
-                  <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'wpconfig' ); ?>
-                  onclick="frontpup_select_credentials_mode();"
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
+            value="wpconfig"
+            <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'wpconfig' ); ?>
+            onclick="frontpup_select_credentials_mode();"
               />
           <?php echo esc_html__('IAM Access Keys saved in wp-config.php', 'frontpup'); ?>
         </label>
@@ -81,11 +85,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
         <br />
 
         <label>
-          <input type="radio"
-                  name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
-                  value="database"
-                  <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'database' ); ?>
-                  onclick="frontpup_select_credentials_mode();"
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[credentials_mode]"
+            value="database"
+            <?php checked( isset( $settings['credentials_mode'] ) && $settings['credentials_mode'] === 'database' ); ?>
+            onclick="frontpup_select_credentials_mode();"
           />
           <?php echo esc_html__('IAM Access Keys provided below', 'frontpup'); ?>
         </label>
@@ -117,10 +122,11 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
   <tr class="csd-credentials">
     <th scope="row"><?php echo esc_html__('AWS Access Key ID', 'frontpup'); ?></th>
     <td>
-      <input type="text"
-              name="<?php echo esc_attr($this->settings_key); ?>[access_key_id]"
-              value="<?php echo esc_attr($settings['access_key_id'] ?? ''); ?>"
-              class="regular-text">
+      <input
+        type="text"
+        name="<?php echo esc_attr($this->settings_key); ?>[access_key_id]"
+        value="<?php echo esc_attr($settings['access_key_id'] ?? ''); ?>"
+        class="regular-text">
       <p>
         <?php echo esc_html(__('Example: AKIAIOSFODNN7EXAMPLE', 'frontpup')); ?>
       </p>
@@ -130,10 +136,11 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
   <tr class="csd-credentials">
     <th scope="row"><?php echo esc_html__('AWS Secret Access Key', 'frontpup'); ?></th>
     <td>
-      <input type="password"
-              name="<?php echo esc_attr($this->settings_key); ?>[secret_access_key]"
-              value="<?php echo esc_attr($settings['secret_access_key'] ?? ''); ?>"
-              class="regular-text">
+      <input
+        type="password"
+        name="<?php echo esc_attr($this->settings_key); ?>[secret_access_key]"
+        value="<?php echo esc_attr($settings['secret_access_key'] ?? ''); ?>"
+        class="regular-text">
       <p>
         <?php echo esc_html(__('Example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY', 'frontpup')); ?>
       </p>
@@ -142,9 +149,10 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
 </table>
 
 <p style="margin-bottom: 0;"><label>
-  <input type="checkbox"
-          name="FrontPupTestCredentials"
-          value="1"
+  <input
+    type="checkbox"
+    name="FrontPupTestCredentials"
+    value="1"
   />
   <?php echo esc_html__('Test credentials, clear cache upon saving', 'frontpup'); ?>
 </label>

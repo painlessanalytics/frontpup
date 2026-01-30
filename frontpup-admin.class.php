@@ -53,7 +53,7 @@ class FrontPup_Admin {
 
         add_menu_page(
             'Welcome',
-            'FrontPup',
+            __('FrontPup', 'frontpup'),
             'manage_options',
             'frontpup-plugin', // menu slug
             [$this->admin_views['welcome'], 'view'],
@@ -62,8 +62,8 @@ class FrontPup_Admin {
 
         add_submenu_page(
             'frontpup-plugin',
-            'Welcome',
-            'Welcome',
+            __('Welcome', 'frontpup'),
+            __('Welcome', 'frontpup'),
             'manage_options',
             'frontpup-plugin', // menu slug
             [$this->admin_views['welcome'], 'view']
@@ -71,8 +71,8 @@ class FrontPup_Admin {
 
         add_submenu_page(
             'frontpup-plugin',
-            'Cache Settings',
-            'Cache Settings',
+            __('Cache Settings', 'frontpup'),
+            __('Cache Settings', 'frontpup'),
             'manage_options',
             'frontpup-cache-settings', // menu slug
             [$this->admin_views['cache-control'], 'view']
@@ -80,8 +80,8 @@ class FrontPup_Admin {
 
         add_submenu_page(
             'frontpup-plugin',
-            'Clear Cache Settings',
-            'Clear Cache Settings',
+            __('Clear Cache Settings', 'frontpup'),
+            __('Clear Cache Settings', 'frontpup'),
             'manage_options',
             'frontpup-clear-cache', // menu slug
             [$this->admin_views['clear-cache'], 'view']
@@ -120,7 +120,7 @@ class FrontPup_Admin {
 
         $args = array(
             'id'    => 'frontpup_admin_menu',
-            'title' => 'FrontPup',
+            'title' => __('FrontPup', 'frontpup'),
             'href'  => '',
             'meta'  => array( 'class' => 'frontpup-admin-bar-menu' )
         );
@@ -176,7 +176,7 @@ class FrontPup_Admin {
             return;
         }
 
-        // Check nonce TODO:
+        // Check nonce
         if( !check_ajax_referer( 'frontpup_clear_cache_nonce', 'nonce', false ) ) {
             wp_send_json_error( __( 'Invalid security token sent.', 'frontpup' ) );
             return;
