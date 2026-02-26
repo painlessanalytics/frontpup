@@ -11,10 +11,10 @@
   content:"\f12a";
   content: "\f147"; /* checkmark icon */
   color:#00cc00; /* darker green color */
-  font-size:14px;
   font: normal 20px / 1 dashicons;
   padding: 4px 0;
   top: 2px;
+}
 }
 #wp-admin-bar-frontpup-adminbar-menu.frontpup-error .ab-icon:before,
 #wp-admin-bar-frontpup-adminbar-menu.frontpup-error .ab-item:hover .ab-icon:before {
@@ -22,10 +22,10 @@
   content: "\f158"; /* no icon */
   /* Copilot change the line below to a lighter red */
   color: #ff6666; /* lighter red */
-  font-size:14px;
   font: normal 20px / 1 dashicons;
   padding: 4px 0;
   top: 2px;
+}
 }
 #wp-admin-bar-frontpup-clear-cache-status .ab-item {
   font-style: italic;
