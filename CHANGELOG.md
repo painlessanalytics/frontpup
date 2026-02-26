@@ -17,10 +17,11 @@ TBD
 
 Clear cache in admin bar enhanced
 
-* JavaScript logic rewritten to not rely on jQuery.
-* CSS created with loading.gif embedded directly into css for performance.
-* Errors and success message simplified for display in admin bar menu.
-* Icon source: [Loading icon.gif](https://commons.wikimedia.org/wiki/File:YouTube_loading_symbol_3_%28transparent%29.gif)
+- JavaScript logic rewritten to not rely on jQuery.
+- CSS created with loading.gif embedded directly into css for performance.
+- Errors and success message simplified for display in admin bar menu.
+- Icon source: [Loading icon.gif](https://commons.wikimedia.org/wiki/File:YouTube_loading_symbol_3_%28transparent%29.gif)
+- Removed no longer used code in the frontpup-admin.class.php related to the clear cache functionality. It is now fully handled in the frontpup-admin-bar.class.php file.
 
 ## [1.1] - 2026-01-30
 
