@@ -134,6 +134,12 @@ class FrontPup_AdminBar {
         // Perform cache clearing
         $FrontPupObj = FrontPup::get_instance();
         $clearCacheObj = $FrontPupObj->get_clear_cache_instance();
+
+        if ( $clearCacheObj === null ) {
+            $error_message = __( 'An error occurred.', 'frontpup' );
+            wp_send_json_error( $error_message );
+            return;
+        }
         $result = $clearCacheObj->clear_cache();
 
         if ( $result === false ) {
