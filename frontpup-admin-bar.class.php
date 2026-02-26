@@ -88,9 +88,6 @@ class FrontPup_AdminBar {
         $wp_admin_bar->add_node( $args );
 
         // Submenu: Cache Settings
-        $url = admin_url( 'admin.php?action=frontpup_clear_cache' );
-        $nonceUrl = wp_nonce_url( $url, 'frontpup_clear_cache', 'frontpup_clear_cache_nonce' );
-
         $args = array(
             'id'    => 'frontpup-clear-cache',
             'title' => __('Clear CloudFront Cache', 'frontpup'),
