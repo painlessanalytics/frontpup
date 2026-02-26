@@ -37,6 +37,11 @@ if( !class_exists('FrontPup') ) {
     FrontPup::get_instance();
 }
 
+if( !class_exists('FrontPup_AdminBar') ) {
+    require_once FRONTPUP_PLUGIN_PATH . 'frontpup-admin-bar.class.php';
+    FrontPup_AdminBar::get_instance();
+}
+
 if( is_admin() ) {
     require_once FRONTPUP_PLUGIN_PATH . 'frontpup-admin.class.php';
 }

@@ -35,11 +35,11 @@ class FrontPup_Admin {
         // Admin hooks
         add_action( 'admin_menu', [$this, 'admin_menu'] );
         add_action( 'admin_init', [$this, 'admin_init'] );
-        add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 801 );
+        //add_action( 'admin_bar_menu', [$this, 'admin_bar_menu'], 801 );
 
         // Clear cache ajax action
-        add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue_scripts'] );
-        add_action( 'wp_ajax_frontpup_clear_cache_action', [$this, 'wp_ajax_frontpup_clear_cache_action']);
+        //add_action( 'admin_enqueue_scripts', [$this, 'admin_enqueue_scripts'] );
+        //add_action( 'wp_ajax_frontpup_clear_cache_action', [$this, 'wp_ajax_frontpup_clear_cache_action']);
     }
 
     /**
