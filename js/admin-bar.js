@@ -34,7 +34,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         }
 
-        statusElementTop.classList.add('frontpup-loading');
+        if (statusElementTop) {
+            statusElementTop.classList.add('frontpup-loading');
+        }
         fetch(frontpupClearCache.ajax_url, options)
             .then(response => {
                 // Handle potential HTTP errors
