@@ -138,6 +138,14 @@ class FrontPup_AdminBar {
 
         if ( $result === false ) {
             $error_message = __( 'An error occurred.', 'frontpup' );
+
+            // Attempt to get a more specific error message from the clear cache object.
+            if ( method_exists( $clearCacheObj, 'get_last_error' ) ) {
+                $last_error = $clearCacheObj->get_last_error();
+                if ( ! empty( $last_error ) ) {
+                    $error_message = $last_error;
+                }
+            }
             wp_send_json_error( $error_message );
             return;
         } else {
