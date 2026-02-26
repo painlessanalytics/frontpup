@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (statusElement) {
             const innerElement = statusElement.querySelector('.ab-item');
             if (innerElement) {
-                innerElement.innerHTML = frontpupClearCache.processing;
+                innerElement.textContent = frontpupClearCache.processing;
             }
         }
 
@@ -75,7 +75,7 @@ function frontpupShowNotice(message, type = 'success') {
     if (statusElement) {
         const innerElement = statusElement.querySelector('.ab-item');
         if (innerElement) {
-            innerElement.innerHTML = message;
+            innerElement.textContent = message;
         }
     }
 }
