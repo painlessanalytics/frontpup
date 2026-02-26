@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // Configuration options for the fetch request
         const options = {
             method: 'POST', // Specify the HTTP method
-            body: formData // Convert the JavaScript object to a JSON string
+            body: formData // Use FormData as the request body
         };
 
         const statusElementTop = document.getElementById('wp-admin-bar-frontpup-adminbar-menu');
