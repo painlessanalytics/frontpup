@@ -169,7 +169,7 @@ class FrontPup_AdminBar {
             return;
         }
 
-        wp_enqueue_style( 'frontpup-admin-bar', plugins_url( '/css/admin-bar.css', __FILE__ ), array(), FRONTPUP_VERSION, 'all' );
+        wp_enqueue_style( 'frontpup-admin-bar', plugin_dir_url( __FILE__ ) . 'css/admin-bar.css', [], FRONTPUP_VERSION, 'all' );
 
         $translation_array = array(
             'processing' => __( 'Processing request...', 'frontpup' ),
