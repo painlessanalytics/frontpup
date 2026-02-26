@@ -18,7 +18,6 @@
 }
 #wp-admin-bar-frontpup-adminbar-menu.frontpup-error .ab-icon:before,
 #wp-admin-bar-frontpup-adminbar-menu.frontpup-error .ab-item:hover .ab-icon:before {
-  content:"\f153";
   content: "\f158"; /* no icon */
   /* Copilot change the line below to a lighter red */
   color: #ff6666; /* lighter red */
