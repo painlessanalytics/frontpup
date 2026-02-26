@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (statusElementTop) {
           statusElementTop.classList.remove('frontpup-success');
           statusElementTop.classList.remove('frontpup-error');
+          statusElementTop.classList.add('frontpup-loading');
         }
         const statusElement = document.getElementById('wp-admin-bar-frontpup-clear-cache-status');
         if (statusElement) {
@@ -34,9 +35,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         }
 
-        if (statusElementTop) {
-            statusElementTop.classList.add('frontpup-loading');
-        }
         fetch(frontpupClearCache.ajax_url, options)
             .then(response => {
                 // Handle potential HTTP errors
