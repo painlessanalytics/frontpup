@@ -13,10 +13,11 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
-## [1.2] - 2026-02-26
+## [1.2] - 2026-02-27
 
 Clear cache in admin bar enhanced
 
+- New: Non-intrusive admin bar clear cache functionality.
 - JavaScript logic rewritten to not rely on jQuery.
 - CSS created with loading.gif embedded directly into css for performance.
 - Errors and success message simplified for display in admin bar menu.
