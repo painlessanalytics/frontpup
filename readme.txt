@@ -4,7 +4,7 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.1
+Stable tag: 1.2
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,10 +23,14 @@ You __must__ be using the Amazon Web Services (AWS) [CloudFront](https://aws.ama
 
 == FrontPup Features ==
 
+* Non-intrusive Clear Cache (new) admin bar menu option, now you can clear the cache in any view without impacting other work.
 * Clear CloudFront Cache (creates an Invalidation request)
 * Set no-cache headers for all pages (great for development or testing)
 * Set public and private Cache-Control headers for caching in CloudFront and Browsers
 * Set separate max-age (browser) and s-maxage (CloudFront) cache duration values
+
+=== Non-intrusive Clear Cache (new) ===
+The Non-intrusive Clear Cache admin bar menu option can clear your cache in any view without causing any disruption to your work. The *Clear CloudFront Cache* option is found under the "FrontPup" menu. Requests are performed behind the scenes. The returned status is added to the menu bar as an italics message in the menu. Feedback is reported with the icon to the left of the FrontPup menu option.
 
 == Turbocharge your WordPress Website with CloudFront ==
 Using Amazon CloudFront in front of your WordPress website offers significant benefits by improving performance, security, and scalability. CloudFront is a Delivery Network (CDN) with over 750+ Points of Presence (PoPs) around the world plus over 1,100 PoPs within ISP networks. This highly optimized network makes it _extremely efficient_ at delivering your website to your visitors anywhere around the world. "PoP" locations are designed to reduce latency by caching content closer to your site's visitors.
@@ -113,13 +117,29 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 2. Welcome screen without CloudFront
 3. Page Cache-Control settings
 4. Clear cache settings
-5. Clear CloudFront cache from WordPress admin bar
+5. Non-intrusive Clear CloudFront cache from WordPress admin bar
+6. Non-intrusive Clear CloudFront cache from WordPress admin bar processing...
+7. Non-intrusive Clear CloudFront cache from WordPress admin bar successful!
+8. Non-intrusive Clear CloudFront cache from WordPress admin bar error
+
 
 == Changelog ==
 
 The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
 Changelog
+
+= 1.2 =
+
+Released: 2026-02-27
+
+Clear cache in admin bar enhanced
+
+* New: Non-intrusive admin bar clear cache functionality.
+* JavaScript logic rewritten to not rely on jQuery.
+* CSS created with loading.gif embedded directly into css for performance.
+* Errors and success message simplified for display in admin bar menu.
+* Icon source: [Loading icon.gif](https://commons.wikimedia.org/wiki/File:YouTube_loading_symbol_3_%28transparent%29.gif)
 
 = 1.1 =
 
