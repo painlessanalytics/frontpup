@@ -138,7 +138,7 @@ Clear cache in admin bar waiting switched from gif to svg, much more lightweight
 * Replaced large gif with svg image.
 * Created CSS animation to show that the request is waiting on a response with a spinner style.
 * Updated JavaScript to use the new CSS classes.
-* No longer need the Loading icon.gif.
+* No longer need the loading icon gif.
 
 = 1.2 =
 
