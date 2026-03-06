@@ -22,10 +22,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
             };
 
             const statusElementTop = document.getElementById('wp-admin-bar-frontpup-adminbar-menu');
+            const loadingElement = statusElementTop ? statusElementTop.querySelector('.frontpup-wait') : null;
             if (statusElementTop) {
-            statusElementTop.classList.remove('frontpup-success');
-            statusElementTop.classList.remove('frontpup-error');
-            statusElementTop.classList.add('frontpup-loading');
+                statusElementTop.classList.remove('frontpup-success');
+                statusElementTop.classList.remove('frontpup-error');
+                statusElementTop.classList.add('frontpup-off');
+                if (loadingElement) {
+                    loadingElement.classList.remove('frontpup-wait-off');
+                }
             }
             const statusElement = document.getElementById('wp-admin-bar-frontpup-clear-cache-status');
             if (statusElement) {
@@ -62,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function frontpupShowNotice(message, type = 'success') {
     const statusElementTop = document.getElementById('wp-admin-bar-frontpup-adminbar-menu');
     if (statusElementTop) {
-        statusElementTop.classList.remove('frontpup-loading');
+        statusElementTop.classList.remove('frontpup-off');
         // Add class based on the type
         if (type === 'success') {
             statusElementTop.classList.remove('frontpup-error');
@@ -70,6 +74,10 @@ function frontpupShowNotice(message, type = 'success') {
         } else if (type === 'error') {
             statusElementTop.classList.remove('frontpup-success');
             statusElementTop.classList.add('frontpup-error');
+        }
+        const loadingElement = statusElementTop.querySelector('.frontpup-wait');
+        if (loadingElement) {
+            loadingElement.classList.add('frontpup-wait-off');
         }
     }
     const statusElement = document.getElementById('wp-admin-bar-frontpup-clear-cache-status');

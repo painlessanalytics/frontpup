@@ -79,9 +79,14 @@ class FrontPup_AdminBar {
             return;
         }
 
+        $loadingSvg = '';
+        $loadingSvg .= '<svg class="frontpup-wait-spinner" viewBox="0 0 50 50">';
+        $loadingSvg .= '<circle class="frontpup-wait-spinner-path" cx="25" cy="25" r="20" fill="none" stroke-width="10"></circle>';
+        $loadingSvg .= '</svg>';
+
         $args = array(
             'id'    => 'frontpup-adminbar-menu',
-            'title' => '<span class="ab-icon"></span><span class="ab-label">' . __('FrontPup', 'frontpup') . '</span>',
+            'title' => '<span class="ab-icon"></span><span class="frontpup-wait frontpup-wait-off">'. $loadingSvg .'</span><span class="ab-label">' . __('FrontPup', 'frontpup') . '</span>',
             'href'  => '',
             'meta'  => array( 'class' => 'frontpup-admin-bar-menu' )
         );
