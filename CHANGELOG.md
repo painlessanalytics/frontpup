@@ -13,7 +13,7 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
-## [1.3] - 2026-03-06
+## [1.3.1] - 2026-03-06
 
 Clear cache in admin bar waiting switched from gif to svg, much more lightweight.
 
