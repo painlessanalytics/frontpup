@@ -129,6 +129,17 @@ The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytic
 
 Changelog
 
+= 1.3 =
+
+Released: 2026-03-06
+
+Clear cache in admin bar waiting switched from gif to svg, much more lightweight.
+
+* Replaced large gif with svg image.
+* Created CSS animation to show that the request is waiting on a response with a spinner style.
+* Updated JavaScript to use the new CSS classes.
+* No longer need the loading icon gif.
+
 = 1.2 =
 
 Released: 2026-02-27
