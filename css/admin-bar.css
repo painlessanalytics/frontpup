@@ -57,15 +57,14 @@
   margin: -9px 0 0 -9px;
   width: 18px;
   height: 18px;
-  
-  & .frontpup-wait-spinner-path {
-    stroke: currentColor;
-    stroke-width: 8;
-    stroke-linecap: round;
-    animation: frontpupWaitDash 2s ease-in-out infinite;
-  }
 }
 
+.frontpup-wait-spinner .frontpup-wait-spinner-path {
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-linecap: round;
+  animation: frontpupWaitDash 2s ease-in-out infinite;
+}
 @keyframes frontpupWaitRotate {
   100% {
     transform: rotate(360deg);
