@@ -2,7 +2,7 @@
 /**
  * Lightweight AWS CloudFront Class
  *
- * Extends LightweightAWS_Base to provide CloudFront cache-management API calls
+ * Extends LightAWS_Base to provide CloudFront cache-management API calls
  * without requiring the full AWS SDK for PHP.  Only cache-related operations
  * (invalidations) are implemented.
  *
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 require_once __DIR__ . '/lightaws-base.php';
 
 /**
- * Class LightweightAWS_CloudFront
+ * Class LightAWS_CloudFront
  * 
  * Ref: https://docs.aws.amazon.com/aws-sdk-php/v3/api/ for API versions for other services if needed in the future.
   */

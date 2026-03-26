@@ -24,14 +24,14 @@ Trait: LightAWS_HTTP_WP_Trait  (includes/lightaws-http-wp-trait.php)
   – optional WP HTTP API transport, not used by the library but added via the trait
 ```
 
-`LightweightAWS_Base` handles:
+`LightAWS_Base` handles:
 - AWS Signature Version 4 (SigV4) signing via `sign_request()` / `derive_signing_key()`
 - Credential resolution: constructor options → env vars → ECS task credentials → IMDSv2 (EC2 instance profile)
 - HTTP transport: prefers `curl` when available, falls back to `stream_context_create()` / `file_get_contents()`
 - Retry logic (default 3 attempts) with exception re-throw on final failure
 - XML response parsing and error extraction
 
-`LightweightAWS_CloudFront` adds:
+`LightAWS_CloudFront` adds:
 - CloudFront-specific endpoint (`https://cloudfront.amazonaws.com`)
 - Always signs to `us-east-1` regardless of origin region
 - API version: `2020-05-31`
@@ -57,7 +57,7 @@ The `credentials_mode` setting in `frontpup_clear_cache` controls how AWS creden
 | `wpconfig` | `FRONTPUP_ACCESS_KEY_ID` + `FRONTPUP_SECRET_ACCESS_KEY` constants in `wp-config.php` | Keys outside the database |
 | `database` | `access_key_id` + `secret_access_key` stored in `frontpup_clear_cache` option | Least preferred |
 
-`LightweightAWS_Base::load_iam_credentials()` handles `policy` mode automatically. The `policy` credential chain order: env vars → ECS task endpoint → IMDSv2.
+`LightAWS_Base::load_iam_credentials()` handles `policy` mode automatically. The `policy` credential chain order: env vars → ECS task endpoint → IMDSv2.
 
 ## Cache Invalidation Flow
 
@@ -66,7 +66,7 @@ FrontPup_AdminBar::wp_ajax_frontpup_clear_cache_action()
   → FrontPup::get_clear_cache_instance()
     → new FrontPup_Clear_Cache( $settings )
       → FrontPup_Clear_Cache::clear_cache()
-        → (lightweight) new LightweightAWS_CloudFront( $initOptions )
+        → (lightweight) new LightAWS_CloudFront( $initOptions )
                          →  createInvalidation( $distribution_id, ['/*'] )
         → (full SDK)    new Aws\CloudFront\CloudFrontClient( $initOptions )
                          →  createInvalidation( [...] )
@@ -80,7 +80,7 @@ CloudFront is a **global** service. SigV4 signing scope is always `us-east-1` re
 
 ## Error Handling
 
-- `LightweightAWS_Base::set_last_error()` stores the message and throws `\Exception` by default (`$EXCEPTIONS_ENABLED = true`).
-- Call `LightweightAWS_Base::disable_exceptions(true)` to switch to a return-value error model and use `get_last_error()` / `get_last_error_code()` instead.
+- `LightAWS_Base::set_last_error()` stores the message and throws `\Exception` by default (`$EXCEPTIONS_ENABLED = true`).
+- Call `LightAWS_Base::disable_exceptions(true)` to switch to a return-value error model and use `get_last_error()` / `get_last_error_code()` instead.
 - `FrontPup_Clear_Cache::clear_cache()` catches `\Exception` and returns `false` on failure; retrieve the message with `get_last_error()`.
 - HTTP 4xx/5xx responses are parsed for the CloudFront XML `<ErrorResponse><Error><Message>` envelope before surfacing the error string.
