@@ -70,7 +70,7 @@ class LightAWS_CloudFront extends LightAWS_Base {
      * @return array{status_code: int, body: string, parsed: SimpleXMLElement|null}
      * @throws \Exception On HTTP error or missing distribution ID.
      */
-    public function createInvalidation( string $distribution_id, array $paths = [ '/*' ], ?string $caller_reference = null ): array {
+    public function createInvalidation( string $distribution_id, array $paths = [ '/*' ], ?string $caller_reference = null ): array|false {
  
         if ( $caller_reference === null ) {
             $caller_reference = (string) time();
