@@ -7,7 +7,7 @@ FrontPup ships two paths for making CloudFront API calls:
 | | Lightweight (default) | Full AWS SDK |
 |---|---|---|
 | Location | `includes/` | `aws/` |
-| Entry point | `LightweightAWS_CloudFront` | `Aws\CloudFront\CloudFrontClient` |
+| Entry point | `LightAWS_CloudFront` | `Aws\CloudFront\CloudFrontClient` |
 | Loaded when | `full_aws_sdk` setting is empty/false | `full_aws_sdk` setting is truthy |
 | Autoloader | none needed | `aws/aws-autoloader.php` |
 
@@ -16,12 +16,12 @@ Always prefer the lightweight path for new CloudFront operations. Only fall back
 ## Lightweight AWS Class Hierarchy
 
 ```
-LightweightAWS_Base          (includes/lightaws-base.php)
-  └── LightweightAWS_CloudFront  (includes/lightaws-cloudfront.php)
-    └── LightweightAWS_CloudFront_WP  (includes/lightaws-cloudfront-wp.php)
+LightAWS_Base          (includes/lightaws-base.php)
+  └── LightAWS_CloudFront  (includes/lightaws-cloudfront.php)
+    └── LightAWS_CloudFront_WP  (includes/lightaws-cloudfront-wp.php)
 
-Trait: LightweightAWS_HTTP_WP_Trait  (includes/lightaws-http-wp-trait.php)
-  – optional WP HTTP API transport, not currently used by default
+Trait: LightAWS_HTTP_WP_Trait  (includes/lightaws-http-wp-trait.php)
+  – optional WP HTTP API transport, not used by the library but added via the trait
 ```
 
 `LightweightAWS_Base` handles:
@@ -41,8 +41,8 @@ Trait: LightweightAWS_HTTP_WP_Trait  (includes/lightaws-http-wp-trait.php)
 
 ## Adding a New AWS Service
 
-1. Create `includes/class-aws-{service}.php`
-2. Extend `LightweightAWS_Base`
+1. Create `includes/lightaws-{service}.php`
+2. Extend `LightAWS_Base`
 3. Set the correct service name and API version in `__construct()`
 4. Implement only the API operations actually needed
 5. Use `$this->get()`, `$this->post()`, `$this->put()`, `$this->delete()` for signed requests

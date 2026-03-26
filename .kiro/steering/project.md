@@ -38,7 +38,7 @@ admin/
 includes/
   lightaws-base.php           # LightAWS_Base: SigV4 signing + HTTP helpers
   lightaws-cloudfront.php     # LightAWS_CloudFront: createInvalidation, getInvalidation, listInvalidations
-  lightaws-cloufront-wp.php   # LightAWS_CloudFront_WP
+  lightaws-cloudfront-wp.php   # LightAWS_CloudFront_WP
   lightaws-http-wp-trait.php  # LightAWS_HTTP_WP_Trait: optional WP HTTP API transport
 
 aws/                          # Full AWS SDK for PHP (optional, only loaded when full_aws_sdk enabled)

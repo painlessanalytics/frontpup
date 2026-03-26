@@ -25,9 +25,6 @@ class LightAWS_CloudFront extends LightAWS_Base {
     /** CloudFront global endpoint (always us-east-1, regardless of origin region) */
     const ENDPOINT = 'https://cloudfront.amazonaws.com';
  
-    /** @var string CloudFront Distribution ID */
-    protected $distribution_id = '';
- 
     /**
      * CloudFront signing always targets us-east-1 regardless of where your
      * origin/resources are located.
@@ -45,15 +42,6 @@ class LightAWS_CloudFront extends LightAWS_Base {
         }
 
         parent::__construct( $options, 'cloudfront' );
-    }
- 
-    /**
-     * Set the CloudFront Distribution ID to target.
-     *
-     * @param string $distribution_id
-     */
-    public function set_distribution_id( string $distribution_id ): void {
-        $this->distribution_id = $distribution_id;
     }
 
  
@@ -105,7 +93,7 @@ class LightAWS_CloudFront extends LightAWS_Base {
      * @return array{status_code: int, body: string, parsed: SimpleXMLElement|null}
      * @throws \Exception On HTTP error or missing distribution ID.
      */
-    public function getInvalidation( string $distribution_id, string $invalidation_id ): array {
+    public function getInvalidation( string $distribution_id, string $invalidation_id ): array|false {
  
         $url = $this->build_url(
             '/distribution/' . rawurlencode( $distribution_id )
@@ -124,7 +112,7 @@ class LightAWS_CloudFront extends LightAWS_Base {
      * @return array{status_code: int, body: string, parsed: SimpleXMLElement|null}
      * @throws \Exception On HTTP error or missing distribution ID.
      */
-    public function listInvalidations( string $distribution_id, int $max_items = 100 ): array {
+    public function listInvalidations( string $distribution_id, int $max_items = 100 ): array|false {
  
         $url = $this->build_url(
             '/distribution/' . rawurlencode( $distribution_id ) . '/invalidation',
@@ -132,8 +120,6 @@ class LightAWS_CloudFront extends LightAWS_Base {
         );
  
         return $this->get( $url );
- 
-        //return $this->parse_response( $response );
     }
  
     // -------------------------------------------------------------------------

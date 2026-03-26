@@ -36,7 +36,9 @@
 
 ## File Naming
 
-- PHP class files: `{kebab-case-name}.class.php`
+- PHP include files (inside `includes/`):
+  - Standard includes: `class-{kebab-case-name}.php`
+  - Lightweight AWS includes: `lightaws-*.php`
 - PHP include files: `class-{kebab-case-name}.php` (inside `includes/`)
 - JS files: `{kebab-case-name}.js`
 - CSS files: `{kebab-case-name}.css`
