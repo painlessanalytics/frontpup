@@ -199,7 +199,7 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
         }
         ?>
         <p style="margin-top: 16px;">
-          <?php echo esc_html(__('A smplified version of the AWS SDK will be used if the full SDK cannot be found.', 'frontpup')); ?>
+          <?php echo esc_html(__('A smplified version of the AWS SDK will be used if the Full SDK cannot be found.', 'frontpup')); ?>
         </p>
       </fieldset>
     </td>
