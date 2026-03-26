@@ -2,7 +2,7 @@
 
 ## PHP
 
-- Minimum PHP version: **8.0**. Use typed properties, named arguments, and null-safe operators where appropriate.
+- Minimum PHP version: **8.1**. Use typed properties, named arguments, and null-safe operators where appropriate.
 - All files must begin with `if ( ! defined( 'ABSPATH' ) ) exit;` to prevent direct access.
 - All files end with `// eof` on the last line.
 - Classes use **PascalCase** with the `FrontPup_` prefix (e.g. `FrontPup_Clear_Cache`).
