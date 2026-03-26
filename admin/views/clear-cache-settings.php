@@ -182,8 +182,24 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
         <p>
           <?php echo esc_html(__('Use the full AWS SDK if the Lightweight AWS SDK fails for your environment.', 'frontpup')); ?>
         </p>
+        <?php
+        if( class_exists('Aws\\Sdk') )
+        {
+        ?>
         <p style="margin-top: 16px;">
-          <?php echo esc_html(__('The full AWS SDK may not be included in future releases of FrontPup.', 'frontpup')); ?>
+          <span class="dashicons dashicons-yes"></span> <?php echo esc_html(__('The Full PHP AWS SDK was detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        } else {
+        ?>
+        <p style="margin-top: 16px;">
+          <span class="dashicons dashicons-no"></span> <?php echo esc_html(__('The Full PHP AWS SDK was NOT detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        }
+        ?>
+        <p style="margin-top: 16px;">
+          <?php echo esc_html(__('A smplified version of the AWS SDK will be used if the full SDK cannot be found.', 'frontpup')); ?>
         </p>
       </fieldset>
     </td>
