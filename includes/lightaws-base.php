@@ -617,7 +617,7 @@ class LightAWS_Base {
      * @return array
      * @throws \Exception on HTTP 4xx/5xx status codes.
      */
-    protected function parse_response( $body, $status_code ): array {
+    protected function parse_response( $body, $status_code ): array|false {
  
         if ( $status_code >= 400 ) {
             $this->set_last_error( $this->extract_error_message( $body, $status_code ), $status_code );

@@ -94,8 +94,6 @@ class LightAWS_CloudFront extends LightAWS_Base {
         $url = $this->build_url( '/distribution/' . rawurlencode( $distribution_id ) . '/invalidation' );
  
         return $this->post( $url, $body, [ 'content-type' => 'text/xml' ] );
- 
-        //return $this->parse_response( $response );
     }
  
     /**
@@ -115,8 +113,6 @@ class LightAWS_CloudFront extends LightAWS_Base {
         );
  
         return $this->get( $url );
- 
-        //return $this->parse_response( $response );
     }
  
     /**
