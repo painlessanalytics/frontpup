@@ -46,8 +46,8 @@
 
 ## Versioning & Changelog
 
-- Version numbers follow loose **Semantic Versioning** (MAJOR.MINOR.PATCH).
+- Version numbers follow loose **Semantic Versioning** (`MAJOR.MINOR[.PATCH]`), so releases may be tagged as `1.4` or `1.4.0`.
 - Every release gets an entry in both `CHANGELOG.md` (Markdown, GitHub) and `readme.txt` (WordPress.org).
-- `CHANGELOG.md` format: `## [X.Y.Z] - YYYY-MM-DD` with bullet list of changes.
-- `readme.txt` format: `= X.Y.Z =` with `Released: YYYY-MM-DD` and bullet list.
-- Update `FRONTPUP_VERSION` constant in `frontpup.php` and the `Stable tag` in `readme.txt` for each release.
+- `CHANGELOG.md` format: `## [X.Y[.Z]] - YYYY-MM-DD` with a bullet list of changes.
+- `readme.txt` format: `= X.Y[.Z] =` with `Released: YYYY-MM-DD` and a bullet list.
+- Update the `FRONTPUP_VERSION` constant in `frontpup.php` and the `Stable tag` in `readme.txt` to match the release version for each release.
