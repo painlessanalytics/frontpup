@@ -22,20 +22,16 @@ trait LightAWS_HTTP_WP_Trait {
         }
 
         $response = wp_remote_request( $url, $args );
-        if( $response === false ) {
-            $this->set_last_error( 'Unknown error occurred during HTTP request.' );
+        if ( is_wp_error( $response ) ) {
+            // Handle WP_Error responses from the WordPress HTTP API
+            $this->set_last_error( $response->get_error_message(), 0 );
             return false;
         }
 
         $status_code = (int) wp_remote_retrieve_response_code( $response );
-        if( !is_wp_error( $response ) ) {
-            // Return the response parsed by the child class's parse_response method
-            $body = wp_remote_retrieve_body( $response );
-            return $this->parse_response( $body, $status_code );
-        }
-
-        $this->set_last_error( $response->get_error_message(), $status_code );
-        return false;
+        // Return the response parsed by the child class's parse_response method
+        $body = wp_remote_retrieve_body( $response );
+        return $this->parse_response( $body, $status_code );
     }
 }
 
