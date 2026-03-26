@@ -612,17 +612,20 @@ class LightAWS_Base {
     }
 
     /**
-     * Parse an HTTP response from wp_remote_*.
+     * Parse an HTTP response body and status code.
      *
-     * Returns an associative array with:
+     * On success (status code < 400), returns an associative array with:
      *   - status_code (int)
      *   - body (string)
-     *   - parsed (SimpleXMLElement|null)  – parsed XML on success
+     *   - parsed (SimpleXMLElement|null) – parsed XML on success
      *
-     * @param array|WP_Error $response WordPress HTTP response
+     * On error (status code >= 400), this method records the last error
+     * and returns false when exceptions are disabled.
      *
-     * @return array
-     * @throws \Exception on HTTP 4xx/5xx status codes.
+     * @param string $body        Raw response body.
+     * @param int    $status_code HTTP status code.
+     *
+     * @return array|false
      */
     protected function parse_response( $body, $status_code ): array|false {
  
