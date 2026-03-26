@@ -614,10 +614,10 @@ class LightAWS_Base {
      *
      * @param array|WP_Error $response WordPress HTTP response
      *
-     * @return array
-     * @throws \Exception on HTTP 4xx/5xx status codes.
+     * @return array|false False when exceptions are disabled and status code is >= 400.
+     * @throws \Exception on HTTP 4xx/5xx status codes when exceptions are enabled.
      */
-    protected function parse_response( $body, $status_code ): array {
+    protected function parse_response( $body, $status_code ): array|false {
  
         if ( $status_code >= 400 ) {
             $this->set_last_error( $this->extract_error_message( $body, $status_code ), $status_code );
