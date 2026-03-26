@@ -466,7 +466,12 @@ class LightAWS_Base {
     }
 
     /**
-     * Execute a signed HTTP request via the WordPress HTTP API.
+     * Execute a signed HTTP request using the internal http_request() transport.
+     *
+     * The base implementation prefers cURL and falls back to PHP stream
+     * functions (stream_context_create()/file_get_contents()). WordPress-
+     * specific subclasses may override this method to route requests via the
+     * WordPress HTTP API instead.
      *
      * @param string $method        HTTP verb
      * @param string $url           Request URL
