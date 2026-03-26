@@ -5,7 +5,7 @@ FrontPup is a WordPress plugin that integrates with AWS CloudFront to manage cac
 - Plugin slug: `frontpup`
 - Text domain: `frontpup`
 - Current version: `1.4`
-- Requires WordPress: 6.0+, PHP: 8.0+
+- Requires WordPress: 6.0+, PHP: 8.1+
 - License: GPL v2 or later
 - Plugin URI: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
 - GitHub: https://github.com/painlessanalytics/frontpup
