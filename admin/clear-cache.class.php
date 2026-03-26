@@ -17,11 +17,12 @@ class FrontPup_Admin_Clear_Cache extends FrontPup_Admin_Base {
     'credentials_mode' => 'policy', // 'policy' or 'wpconfig' or 'database'
     'access_key_id' => '',
     'secret_access_key' => '',
+    'full_aws_sdk' => '',
   ];
 
   protected $booleanFields = ['clear_cache_enabled'];
   protected $numericFields = [];
-  protected $stringFields = ['distribution_id', 'credentials_mode', 'access_key_id', 'secret_access_key'];
+  protected $stringFields = ['distribution_id', 'credentials_mode', 'access_key_id', 'secret_access_key', 'full_aws_sdk'];
   protected $view = 'clear-cache-settings';
 
 

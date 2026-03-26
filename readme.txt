@@ -4,8 +4,8 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.1
-Requires PHP: 8.1
+Stable tag: 1.4
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,16 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
 Changelog
+
+= 1.4 =
+
+Released: 2026-03-26
+
+Added Lightweight AWS SDK as the default method to contact AWS to clear cache.
+
+- Added option to switch between the new Lightweight AWS SDK and the Full AWS SDK.
+- Fixed FrontPup defines not fully being used.
+- Added new LightAWS library files.
 
 = 1.3.1 =
 

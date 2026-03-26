@@ -1,6 +1,8 @@
 /.wordpress-org
 /.git
 /.github
+/.kiro
+/.vscode
 /node_modules
 .distignore
 .gitignore

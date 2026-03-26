@@ -13,6 +13,15 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.4] - 2026-03-06
+
+Added Lightweight AWS SDK as the default option
+
+- Added option to switch between the new Lightweight AWS SDK and the Full AWS SDK.
+- Fixed FrontPup defines not fully being used.
+- Added Kiro steering folder and files (for working on project with Kiro.dev)
+- Added new LightAWS library files.
+
 ## [1.3.1] - 2026-03-06
 
 Clear cache in admin bar waiting switched from gif to svg, much more lightweight.

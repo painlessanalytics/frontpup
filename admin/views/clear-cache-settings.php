@@ -148,6 +148,48 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
   </tr>
 </table>
 
+
+<table class="form-table" id="frontpup-full-aws-sdk"
+  <!-- Create a fieldset for selecting whether to use the AWS SDK or Lightweight AWS SDK -->
+   <tr>
+    <th scope="row"><?php echo esc_html__('AWS SDK', 'frontpup'); ?></th>
+    <td>
+      <fieldset>
+        <label>
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
+            value=""
+            <?php checked( empty( $settings['full_aws_sdk'] ) ); ?>
+          />
+          <?php echo esc_html__('Lightweight AWS SDK', 'frontpup'); ?>
+          <span class="recommended"><?php echo esc_html('Recommended', 'frontpup'); ?></span>
+        </label>
+        <p>
+          <?php echo esc_html(__('The Lightweight AWS SDK is a custom implementation that supports more versions of WordPress and provides only the necessary functionality, without the overhead of the full AWS SDK.', 'frontpup')); ?>
+        </p>
+        <br />
+
+        <label>
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
+            value="1"
+            <?php checked( isset( $settings['full_aws_sdk'] ) && $settings['full_aws_sdk'] ); ?>
+          />
+          <?php echo esc_html__('Full AWS SDK', 'frontpup'); ?>
+        </label>
+        <p>
+          <?php echo esc_html(__('Use the full AWS SDK if the Lightweight AWS SDK fails for your environment.', 'frontpup')); ?>
+        </p>
+        <p style="margin-top: 16px;">
+          <?php echo esc_html(__('The full AWS SDK may not be included in future releases of FrontPup.', 'frontpup')); ?>
+        </p>
+      </fieldset>
+    </td>
+  </tr>
+</table>
+
 <p style="margin-bottom: 0;"><label>
   <input
     type="checkbox"
