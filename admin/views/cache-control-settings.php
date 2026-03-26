@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 					<?php checked( $settings['cachecontrol'], 3 ); ?>
 				/>
 				<div>
-                    <label for="cachecontrol-input-browser-cloudfront"><?php echo esc_html( 'Browser and CloudFront Cache', 'frontpup' ); ?> <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup') ); ?></span></label>
+                    <label for="cachecontrol-input-browser-cloudfront"><?php echo esc_html( __('Browser and CloudFront Cache', 'frontpup' ) ); ?> <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup') ); ?></span></label>
                     
 					<p id="cachecontrol-input-browser-cloudfront-description">
                         <code><?php echo esc_html(__( 'Cache-Control: public, max-age=VALUE', 'frontpup' )); ?></code>
