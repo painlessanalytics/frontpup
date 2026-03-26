@@ -97,7 +97,7 @@ class FrontPup_Clear_Cache {
             ],
         ]);
 
-      } catch (AwsException $e) {
+      } catch (Aws\Exception\AwsException $e) {
         // Handle the exception if an error occurs
         // You can also get specific details about the AWS error
         //echo "AWS Error Code: " . $e->getAwsErrorCode() . "\n";
