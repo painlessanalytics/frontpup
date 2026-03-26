@@ -149,7 +149,7 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
 </table>
 
 
-<table class="form-table" id="frontpup-full-aws-sdk"
+<table class="form-table" id="frontpup-full-aws-sdk">
   <!-- Create a fieldset for selecting whether to use the AWS SDK or Lightweight AWS SDK -->
    <tr>
     <th scope="row"><?php echo esc_html__('AWS SDK', 'frontpup'); ?></th>
