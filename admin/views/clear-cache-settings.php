@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
             onclick="frontpup_select_credentials_mode();"
           />
           <?php echo esc_html__('IAM Role assigned to EC2 Instances, ECS tasks, and EKS pods', 'frontpup'); ?>
-          <span class="recommended"><?php echo esc_html('Recommended', 'frontpup'); ?></span>
+          <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup')); ?></span>
         </label>
         <p>
           <?php echo esc_html(__('This is the recommended method, no keys are stored on the server.', 'frontpup')); ?>
@@ -163,7 +163,7 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
             <?php checked( empty( $settings['full_aws_sdk'] ) ); ?>
           />
           <?php echo esc_html__('Lightweight AWS SDK', 'frontpup'); ?>
-          <span class="recommended"><?php echo esc_html('Recommended', 'frontpup'); ?></span>
+          <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup') ); ?></span>
         </label>
         <p>
           <?php echo esc_html(__('The Lightweight AWS SDK is a custom implementation that supports more versions of WordPress and provides only the necessary functionality, without the overhead of the full AWS SDK.', 'frontpup')); ?>

@@ -6,7 +6,7 @@
 - All files must begin with `if ( ! defined( 'ABSPATH' ) ) exit;` to prevent direct access.
 - All files end with `// eof` on the last line.
 - Classes use **PascalCase** with the `FrontPup_` prefix (e.g. `FrontPup_Clear_Cache`).
-- Lightweight AWS classes use the `LightweightAWS_` prefix (e.g. `LightweightAWS_CloudFront`).
+- Lightweight AWS classes use the `LightAWS_` prefix (e.g. `LightAWS_CloudFront`).
 - Methods and functions use **snake_case**.
 - Constants use **SCREAMING_SNAKE_CASE** with the `FRONTPUP_` prefix.
 - WordPress option keys use **snake_case** with the `frontpup_` prefix.

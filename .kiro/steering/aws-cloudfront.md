@@ -16,10 +16,11 @@ Always prefer the lightweight path for new CloudFront operations. Only fall back
 ## Lightweight AWS Class Hierarchy
 
 ```
-LightweightAWS_Base          (includes/class-aws-base.php)
-  └── LightweightAWS_CloudFront  (includes/class-aws-cloudfront.php)
+LightweightAWS_Base          (includes/lightaws-base.php)
+  └── LightweightAWS_CloudFront  (includes/lightaws-cloudfront.php)
+    └── LightweightAWS_CloudFront_WP  (includes/lightaws-cloudfront-wp.php)
 
-Trait: LightweightAWS_HTTP_WP_Trait  (includes/trait-aws-http-wp.php)
+Trait: LightweightAWS_HTTP_WP_Trait  (includes/lightaws-http-wp-trait.php)
   – optional WP HTTP API transport, not currently used by default
 ```
 

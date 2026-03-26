@@ -13,7 +13,7 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
-## [1.4] - 2026-03-06
+## [1.4] - 2026-03-26
 
 Added Lightweight AWS SDK as the default option
 

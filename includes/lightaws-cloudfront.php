@@ -151,7 +151,7 @@ class LightAWS_CloudFront extends LightAWS_Base {
     protected function build_url( string $path, array $query_params = [] ): string {
         $url = self::ENDPOINT . '/' . $this->get_api_version() . $path;
         if ( ! empty( $query_params ) ) {
-            $url .= '?' . http_build_query( $query_params );
+            $url .= '?' . http_build_query( $query_params, '', '&', PHP_QUERY_RFC3986 );
         }
         return $url;
     }

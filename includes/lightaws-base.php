@@ -374,7 +374,6 @@ class LightAWS_Base {
     protected function http_request_curl( string $method, string $url, array $args = [] ) {
 
         $curl = curl_init();
-        // Copilot: Code the curl implementation
         curl_setopt_array( $curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
