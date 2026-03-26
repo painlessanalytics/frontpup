@@ -419,7 +419,10 @@ class LightAWS_Base {
             foreach ( $args['headers'] as $key => $value ) {
                 $headersAsArrayOfStrings[] = ucwords($key, '-') . ': ' . $value;
             }
+        } else {
+            $args['headers'] = [];
         }
+        
         // Make sure Content-Type is found in the headers
         if ( ! array_key_exists( 'Content-Type', $args['headers'] ) && ! array_key_exists( 'content-type', $args['headers'] ) ) {
             $headersAsArrayOfStrings[] = 'Content-Type: application/x-www-form-urlencoded';
