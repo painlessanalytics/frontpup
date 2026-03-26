@@ -160,11 +160,11 @@ class LightAWS_Base {
 
     /**
      * Load credentials automatically from the environment or the EC2/ECS
-     * instance metadata service (IMDSv2).  Falls through in order:
+     * instance metadata service. Falls through in order:
      *
      *   1. AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY environment variables
-     *   2. EC2 Instance Metadata Service v2 (IMDSv2)
-     *   3. ECS task credentials (AWS_CONTAINER_CREDENTIALS_RELATIVE_URI)
+     *   2. ECS task credentials (AWS_CONTAINER_CREDENTIALS_RELATIVE_URI)
+     *   3. EC2 Instance Metadata Service v2 (IMDSv2)
      *
      * @return bool True on success, false if no credentials could be resolved.
      */
