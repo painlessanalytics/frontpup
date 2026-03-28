@@ -131,7 +131,7 @@ Changelog
 
 = 1.4 =
 
-Released: 2026-03-26
+Released: 2026-03-27
 
 Added Lightweight AWS SDK as the default method to contact AWS to clear cache.
 
