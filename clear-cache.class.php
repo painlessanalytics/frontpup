@@ -34,13 +34,13 @@ class FrontPup_Clear_Cache {
     $mode = isset($this->settings['credentials_mode']) ? $this->settings['credentials_mode'] : 'policy';
     switch( $mode ) {
       case 'wpconfig': {
-        if( defined('CLOUDFRONT_ACCESS_KEY_ID') && defined('CLOUDFRONT_SECRET_ACCESS_KEY') ) {
+        if( defined('FRONTPUP_ACCESS_KEY_ID') && defined('FRONTPUP_SECRET_ACCESS_KEY') ) {
             $initOptions['credentials'] = [
-              'key'    => CLOUDFRONT_ACCESS_KEY_ID,
-              'secret' => CLOUDFRONT_SECRET_ACCESS_KEY,
+              'key'    => FRONTPUP_ACCESS_KEY_ID,
+              'secret' => FRONTPUP_SECRET_ACCESS_KEY,
             ];
         } else {
-            $this->set_last_error( 'CLOUDFRONT_ACCESS_KEY_ID or CLOUDFRONT_SECRET_ACCESS_KEY not defined in wp-config.php' );
+            $this->set_last_error( 'FRONTPUP_ACCESS_KEY_ID or FRONTPUP_SECRET_ACCESS_KEY not defined in wp-config.php' );
             return false;
         }
       } break;
@@ -62,55 +62,71 @@ class FrontPup_Clear_Cache {
       }
     }
 
-    /**
-     * Load AWS SDK (minimal)
-     * ref: https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct
-     */
-    if ( !class_exists('Aws\\Sdk')) { // AWS SDK was not loaded by another plugin
-      if( !file_exists( plugin_dir_path( __FILE__ ) . 'aws/aws-autoloader.php' ) ) {
-        $this->set_last_error( __('The AWS SDK is not available.', 'frontpup') );
-        return false;
+    // If full AWS SDK is enabled, use it. Otherwise, use the lightweight SDK.
+    if( !empty($this->settings['full_aws_sdk']) ) {
+      /**
+       * Load AWS SDK (minimal)
+       * ref: https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct
+       */
+      if ( !class_exists('Aws\\Sdk')) { // AWS SDK was not loaded by another plugin
+        if( !file_exists( plugin_dir_path( __FILE__ ) . 'aws/aws-autoloader.php' ) ) {
+          $this->set_last_error( __('The full AWS SDK is not available.', 'frontpup') );
+          return false;
+        }
+        
+        // Lets load our version of the AWS SDK
+        require_once plugin_dir_path( __FILE__ ) . 'aws/aws-autoloader.php';
       }
       
-      // Lets load our version of the AWS SDK
-      require_once plugin_dir_path( __FILE__ ) . 'aws/aws-autoloader.php';
-    }
-    
-    if ( !class_exists('Aws\\CloudFront\\CloudFrontClient')) {
-      $this->set_last_error( __('The AWS CloudFront Client is not available.', 'frontpup') );
-      return false;
-    }
+      if ( !class_exists('Aws\\CloudFront\\CloudFrontClient')) {
+        $this->set_last_error( __('The full AWS CloudFront Client is not available.', 'frontpup') );
+        return false;
+      }
 
-    try {
-      $client = new Aws\CloudFront\CloudFrontClient($initOptions);
+      try {
+        $client = new Aws\CloudFront\CloudFrontClient($initOptions);
 
-    
-      $this->result = $client->createInvalidation([
-          'DistributionId' => $this->settings['distribution_id'],
-          'InvalidationBatch' => [
-              'CallerReference' => (string) time(),
-              'Paths' => [
-                  'Quantity' => 1,
-                  'Items' => ['/*'],
-              ],
-          ],
-      ]);
+        $this->result = $client->createInvalidation([
+            'DistributionId' => $this->settings['distribution_id'],
+            'InvalidationBatch' => [
+                'CallerReference' => (string) time(),
+                'Paths' => [
+                    'Quantity' => 1,
+                    'Items' => ['/*'],
+                ],
+            ],
+        ]);
 
-    } catch (AwsException $e) {
-      // Handle the exception if an error occurs
-      // You can also get specific details about the AWS error
-      //echo "AWS Error Code: " . $e->getAwsErrorCode() . "\n";
-      //echo "AWS Error Message: " . $e->getAwsErrorMessage() . "\n";
-      //echo "HTTP Status Code: " . $e->getStatusCode() . "\n";
-      if( $e->getMessage() ) {
+      } catch (Aws\Exception\AwsException $e) {
+        // Handle the exception if an error occurs
+        // You can also get specific details about the AWS error
+        //echo "AWS Error Code: " . $e->getAwsErrorCode() . "\n";
+        //echo "AWS Error Message: " . $e->getAwsErrorMessage() . "\n";
+        //echo "HTTP Status Code: " . $e->getStatusCode() . "\n";
+        if( $e->getMessage() ) {
+          $this->set_last_error( $e->getMessage() );
+          return false;
+        }
+        $this->set_last_error( 'Unknown error occurred creating invalidation.' );
+        return false;
+      } catch (\Exception $e) {
         $this->set_last_error( $e->getMessage() );
         return false;
       }
-      $this->set_last_error( 'Unknown error occurred creating invalidation.' );
-      return false;
-    } catch (\Exception $e) {
-      $this->set_last_error( $e->getMessage() );
-      return false;
+    } else {
+      /**
+       * Lightweight AWS SDK path – no bundled AWS SDK required.
+       */
+      require_once plugin_dir_path( __FILE__ ) . 'includes/lightaws-cloudfront-wp.php';
+ 
+      try {
+        $cf = new LightAWS_CloudFront_WP( $initOptions );
+        $this->result = $cf->createInvalidation($this->settings['distribution_id'], ['/*'] );
+ 
+      } catch (\Exception $e) {
+        $this->set_last_error( $e->getMessage() );
+        return false;
+      }
     }
 
     // For demonstration, let's assume it returns true on success

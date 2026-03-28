@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
             onclick="frontpup_select_credentials_mode();"
           />
           <?php echo esc_html__('IAM Role assigned to EC2 Instances, ECS tasks, and EKS pods', 'frontpup'); ?>
-          <span class="recommended"><?php echo esc_html('Recommended', 'frontpup'); ?></span>
+          <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup')); ?></span>
         </label>
         <p>
           <?php echo esc_html(__('This is the recommended method, no keys are stored on the server.', 'frontpup')); ?>
@@ -144,6 +144,64 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
       <p>
         <?php echo esc_html(__('Example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY', 'frontpup')); ?>
       </p>
+    </td>
+  </tr>
+</table>
+
+
+<table class="form-table" id="frontpup-full-aws-sdk">
+  <!-- Create a fieldset for selecting whether to use the AWS SDK or Lightweight AWS SDK -->
+   <tr>
+    <th scope="row"><?php echo esc_html__('AWS SDK', 'frontpup'); ?></th>
+    <td>
+      <fieldset>
+        <label>
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
+            value=""
+            <?php checked( empty( $settings['full_aws_sdk'] ) ); ?>
+          />
+          <?php echo esc_html__('Lightweight AWS SDK', 'frontpup'); ?>
+          <span class="recommended"><?php echo esc_html( __('Recommended', 'frontpup') ); ?></span>
+        </label>
+        <p>
+          <?php echo esc_html(__('The Lightweight AWS SDK is a custom implementation that supports more versions of WordPress and provides only the necessary functionality, without the overhead of the full AWS SDK.', 'frontpup')); ?>
+        </p>
+        <br />
+
+        <label>
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
+            value="1"
+            <?php checked( isset( $settings['full_aws_sdk'] ) && $settings['full_aws_sdk'] ); ?>
+          />
+          <?php echo esc_html__('Full AWS SDK', 'frontpup'); ?>
+        </label>
+        <p>
+          <?php echo esc_html(__('Use the full AWS SDK if the Lightweight AWS SDK fails for your environment.', 'frontpup')); ?>
+        </p>
+        <?php
+        if( class_exists('Aws\\Sdk') )
+        {
+        ?>
+        <p style="margin-top: 16px;">
+          <span class="dashicons dashicons-yes"></span> <?php echo esc_html(__('The Full PHP AWS SDK was detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        } else {
+        ?>
+        <p style="margin-top: 16px;">
+          <span class="dashicons dashicons-no"></span> <?php echo esc_html(__('The Full PHP AWS SDK was NOT detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        }
+        ?>
+        <p style="margin-top: 16px;">
+          <?php echo esc_html(__('A simplified version of the AWS SDK will be used if the Full SDK cannot be found.', 'frontpup')); ?>
+        </p>
+      </fieldset>
     </td>
   </tr>
 </table>
