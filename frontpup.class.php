@@ -161,11 +161,11 @@ class FrontPup {
         $is_authenticated = defined( 'LOGGED_IN_COOKIE' ) && ! empty( $_COOKIE[LOGGED_IN_COOKIE] );
         
         // Check if commenters feature is enabled and user has comment author cookie
-        $is_commentor = ! empty( $this->settings['cache_unique_visitors_commenters_enabled'] ) && 
+        $is_commenter = ! empty( $this->settings['cache_unique_visitors_commenters_enabled'] ) && 
                         ! empty( $_COOKIE['comment_author_' . COOKIEHASH] );
 
-        // If neither authenticated nor commentor, return early
-        if ( ! $is_authenticated && ! $is_commentor ) {
+        // If neither authenticated nor commenter, return early
+        if ( ! $is_authenticated && ! $is_commenter ) {
             return;
         }
 
@@ -177,7 +177,8 @@ class FrontPup {
             // For commenters, generate a hash based on comment author cookie
             $cookie_value = md5( $_COOKIE['comment_author_' . COOKIEHASH] );
             // Match WordPress comment cookie expiration (YEAR_IN_SECONDS seconds = 365 days)
-            $cookie_expire = time() + YEAR_IN_SECONDS;
+            $comment_cookie_lifetime = (int) apply_filters( 'comment_cookie_lifetime', YEAR_IN_SECONDS );
+            $cookie_expire = time() + $comment_cookie_lifetime;
         }
 
         // Check if cookie already exists with same value to avoid redundant setcookie calls
@@ -189,7 +190,7 @@ class FrontPup {
         $secure = is_ssl();
 
         // Call setcookie() with parameters: name, value, expire, '/', '', secure, true (httponly), 'Lax' (samesite)
-        setcookie( $cookie_name, $cookie_value, $cookie_expire, '/', '', $secure, true, 'Lax' );
+        setcookie( $cookie_name, $cookie_value, $cookie_expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
     }
 
     /**
