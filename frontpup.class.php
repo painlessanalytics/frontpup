@@ -46,7 +46,7 @@ class FrontPup {
             return;
         }
 
-        // Set unique visitor cookie for authenticated users (if enabled)
+        // Set the unique visitor cookie for authenticated users (if enabled)
         $this->set_unique_visitor_cookie();
 
         // If this is 404 page, do not change the cache headers
@@ -189,7 +189,7 @@ class FrontPup {
         // Determine secure flag using is_ssl()
         $secure = is_ssl();
 
-        // Call setcookie() with parameters: name, value, expire, '/', '', secure, true (httponly), 'Lax' (samesite)
+        // Call setcookie() with parameters: name, value, expire, '/', '', secure, true (httponly)
         setcookie( $cookie_name, $cookie_value, $cookie_expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
     }
 
