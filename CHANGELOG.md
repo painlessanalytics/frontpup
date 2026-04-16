@@ -13,6 +13,14 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.5] - 2026-04-16
+
+Added new Cache Unique Visitors option.
+
+- Added settings for Cache Unique Visitors option
+- Added logic to set a special cache cookie for unique visitors
+- Included Commenters with the Cache Unique Visitors option
+
 ## [1.4] - 2026-03-27
 
 Added Lightweight AWS SDK as the default option

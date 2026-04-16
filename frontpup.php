@@ -11,7 +11,7 @@
  * Plugin Name:       FrontPup
  * Plugin URI:        https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
  * Description:       FrontPup, your CloudFront companion - Clear cache and optimize your CloudFront distribution for your WordPress website.
- * Version:           1.4
+ * Version:           1.5
  * Requires at least: 6.0
  * Tested up to:      6.9
  * Requires PHP:      8.1
