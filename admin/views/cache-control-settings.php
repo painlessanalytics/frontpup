@@ -155,6 +155,85 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 </table>
 </div><!-- end of frontpup-smaxage-input-container -->
 </div><!-- end of frontpup-ttl-input-container -->
+
+<h2><?php echo esc_html(__('Cache Unique Visitors', 'frontpup')); ?></h2>
+<table class="form-table" role="presentation">
+<tbody>
+<tr>
+	<th scope="row"><?php echo esc_html(__('Enable Cache Unique Visitors', 'frontpup')); ?></th>
+	<td>
+		<p>
+			<label>
+				<input 
+					type="hidden" 
+					name="<?php echo esc_attr($this->settings_key); ?>[cache_unique_visitors_enabled]"
+					value="0" />
+				<input
+					type="checkbox"
+					name="<?php echo esc_attr($this->settings_key); ?>[cache_unique_visitors_enabled]" 
+					value="1"
+					onclick="document.getElementById('cache-unique-visitors-cookie-name-row').style.display = this.checked ? '' : 'none';"
+					<?php checked( isset( $settings['cache_unique_visitors_enabled'] ) && $settings['cache_unique_visitors_enabled'] ); ?> 
+				/>
+				<?php echo esc_html(__('Set a unique cookie for authenticated users to enable CloudFront cache differentiation.', 'frontpup')); ?>
+			</label>
+		</p>
+	</td>
+</tr>
+</tbody>
+</table>
+
+<div id="cache-unique-visitors-cookie-name-row" style="<?php echo ( isset( $settings['cache_unique_visitors_enabled'] ) && $settings['cache_unique_visitors_enabled'] ) ? '' : 'display:none;'; ?>">
+<table class="form-table" role="presentation">
+<tbody>
+<tr>
+	<th scope="row"><?php echo esc_html(__('Cookie Name', 'frontpup')); ?></th>
+	<td>
+		<p>
+			<input 
+				name="<?php echo esc_attr($this->settings_key); ?>[cache_unique_visitors_cookie_name]" 
+				id="frontpup-cache-unique-visitors-cookie-name"
+				type="text" 
+				value="<?php echo esc_attr( $settings['cache_unique_visitors_cookie_name'] ); ?>"
+				class="regular-text"
+			/>
+		</p>
+		<p>
+			<?php echo esc_html(__('Cookie name to use (default: cf_cache). Must match your CloudFront cache policy configuration.', 'frontpup')); ?>
+		</p>
+		<p>
+			<strong><?php echo esc_html(__('Important:', 'frontpup')); ?></strong> 
+			<?php echo esc_html(__('You must configure your CloudFront cache policy to include this cookie name in the cache key.', 'frontpup')); ?>
+		</p>
+	</td>
+</tr>
+<tr>
+	<th scope="row"><?php echo esc_html(__('Commenters', 'frontpup')); ?></th>
+	<td>
+		<p>
+			<label>
+				<input 
+					type="hidden" 
+					name="<?php echo esc_attr($this->settings_key); ?>[cache_unique_visitors_commenters_enabled]"
+					value="0" />
+				<input
+					type="checkbox"
+					name="<?php echo esc_attr($this->settings_key); ?>[cache_unique_visitors_commenters_enabled]" 
+					value="1"
+					<?php checked( isset( $settings['cache_unique_visitors_commenters_enabled'] ) && $settings['cache_unique_visitors_commenters_enabled'] ); ?> 
+				/>
+				<?php echo esc_html(__('Allow non-signed-in users who leave comments to see their comment preview on the page.', 'frontpup')); ?>
+			</label>
+		</p>
+		<p>
+			<?php echo esc_html(__('When enabled, the unique visitor cookie will be set for commenters so they can see their pending comment after posting. The cookie will expire at the same time as the WordPress comment cookies.', 'frontpup')); ?>
+		</p>
+	</td>
+</tr>
+</tbody>
+</table>
+</div><!-- end of cache-unique-visitors-cookie-name-row -->
+
 <style>
 .frontpup-settings .recommended {
     background-color: #135e96;

@@ -46,6 +46,9 @@ class FrontPup {
             return;
         }
 
+        // Set unique visitor cookie for authenticated users (if enabled)
+        $this->set_unique_visitor_cookie();
+
         // If this is 404 page, do not change the cache headers
         if ( is_404() ) {
             if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
@@ -132,6 +135,80 @@ class FrontPup {
             return null;
         }
         return new FrontPup_Clear_Cache( $clearCacheSettings );
+    }
+
+    /**
+     * Set unique visitor cookie for authenticated users
+     * Called during send_headers filter before cache headers are set
+     * 
+     * @return void
+     */
+    private function set_unique_visitor_cookie(): void {
+        // Check if cache_unique_visitors_enabled setting is truthy, return early if not
+        if ( empty( $this->settings['cache_unique_visitors_enabled'] ) ) {
+            return;
+        }
+
+        // Check if headers already sent using headers_sent(), return early if true
+        if ( headers_sent() ) {
+            return;
+        }
+
+        // Get cookie name from settings with fallback to 'cf_cache'
+        $cookie_name = $this->settings['cache_unique_visitors_cookie_name'] ?? 'cf_cache';
+
+        // Check if user is authenticated
+        $is_authenticated = defined( 'LOGGED_IN_COOKIE' ) && ! empty( $_COOKIE[LOGGED_IN_COOKIE] );
+        
+        // Check if commenters feature is enabled and user has comment author cookie
+        $is_commentor = ! empty( $this->settings['cache_unique_visitors_commenters_enabled'] ) && 
+                        ! empty( $_COOKIE['comment_author_' . COOKIEHASH] );
+
+        // If neither authenticated nor commentor, return early
+        if ( ! $is_authenticated && ! $is_commentor ) {
+            return;
+        }
+
+        // Generate cookie value
+        if ( $is_authenticated ) {
+            $cookie_value = $this->generate_unique_visitor_value();
+            $cookie_expire = 0; // Session cookie for authenticated users
+        } else {
+            // For commenters, generate a hash based on comment author cookie
+            $cookie_value = md5( $_COOKIE['comment_author_' . COOKIEHASH] );
+            // Match WordPress comment cookie expiration (YEAR_IN_SECONDS seconds = 365 days)
+            $cookie_expire = time() + YEAR_IN_SECONDS;
+        }
+
+        // Check if cookie already exists with same value to avoid redundant setcookie calls
+        if ( isset( $_COOKIE[$cookie_name] ) && $_COOKIE[$cookie_name] === $cookie_value ) {
+            return;
+        }
+
+        // Determine secure flag using is_ssl()
+        $secure = is_ssl();
+
+        // Call setcookie() with parameters: name, value, expire, '/', '', secure, true (httponly), 'Lax' (samesite)
+        setcookie( $cookie_name, $cookie_value, $cookie_expire, '/', '', $secure, true, 'Lax' );
+    }
+
+    /**
+     * Generate unique visitor cookie value
+     * Creates a deterministic hash based on user ID and session token
+     * 
+     * @return string Cookie value (32-character hex string)
+     */
+    private function generate_unique_visitor_value(): string {
+        $user_id = get_current_user_id();
+        $session_token = wp_get_session_token();
+
+        // Combine user ID and session token
+        $data = $user_id . '|' . $session_token;
+
+        // Generate hash (md5 is sufficient for cache differentiation, not security)
+        $hash = md5( $data );
+
+        return $hash;
     }
 };
 

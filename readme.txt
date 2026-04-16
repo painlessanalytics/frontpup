@@ -4,7 +4,7 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.4
+Stable tag: 1.5
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -128,6 +128,16 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
 Changelog
+
+ = 1.5 =
+ 
+Released: 2026-04-16
+
+Added new Cache Unique Visitors option.
+
+- Added settings for Cache Unique Visitors option
+- Added logic to set a special cache cookie for unique visitors
+- Included Commenters with the Cache Unique Visitors option
 
 = 1.4 =
 
