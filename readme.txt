@@ -113,15 +113,11 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 
 == Screenshots ==
 
-1. Welcome to FrontPup with CloudFront
-2. Welcome screen without CloudFront
-3. Page Cache-Control settings
-4. Clear cache settings
-5. Non-intrusive Clear CloudFront cache from WordPress admin bar
-6. Non-intrusive Clear CloudFront cache from WordPress admin bar processing...
-7. Non-intrusive Clear CloudFront cache from WordPress admin bar successful!
-8. Non-intrusive Clear CloudFront cache from WordPress admin bar error
-
+1. Super simple Podcast Episode Gutenberg block
+2. Settings page example, confirming you are good to go (or not)
+3. Settings page example continued, subscribe links
+4. Episode Player example
+5. Episode player Subscribe pop-up box
 
 == Changelog ==
 

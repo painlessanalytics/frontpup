@@ -28,6 +28,56 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
       </p>
     </td>
   </tr>
+  <tr>
+    <th scope="row"><?php echo esc_html__('Tag-based Caching', 'frontpup'); ?></th>
+    <td>
+      <label>
+        <input
+          type="checkbox"
+          name="<?php echo esc_attr($this->settings_key); ?>[tag_based_caching_enabled]"
+          value="1"
+          <?php checked( isset( $settings['tag_based_caching_enabled'] ) && $settings['tag_based_caching_enabled'] ); ?>
+        />
+        <?php echo esc_html__('Enable Tag-based Caching', 'frontpup'); ?>
+      </label>
+      <p>
+        <?php echo esc_html( __('The plugin will add the x-amz-meta-cache-tag header with the post type. Special tags are used for non post-type pages.', 'frontpup') ); ?>
+      </p>
+<style>
+.frontpup-post-types-box {
+	padding-left: 24px;	
+}
+ul.frontpup-post-types {
+    list-style-type: disc !important;
+    padding-left: 20px !important;
+}
+</style>
+      <div class="frontpup-post-types-box">
+  			<h4><?php echo esc_html__('Public Post Types', 'frontpup'); ?></h4>
+			<ul class="frontpup-post-types">
+			<?php
+			$args = array(
+			    'public'   => true,
+			    '_builtin' => false
+			);
+			$post_types = get_post_types(array('public' => true, '_builtin' => true), 'names');
+			foreach ( $post_types  as $post_type ) {
+		        echo '<li><i>' . $post_type . '</i></li>';
+		    }
+			?>
+			</ul>
+      		<h4><?php echo esc_html__('Special tags', 'frontpup'); ?></h4>
+        	<ul class="frontpup-post-types">
+        	  	<li><i>error</i></li>
+        	  	<li><i>home</i></li>
+        	  	<li><i>search</i></li>
+        	  	<li><i>archive</i></li>
+        	  	<li><i>author</i></li>
+        	  	<li><i>unknown</i></li>
+        	</ul>
+      </div>
+    </td>
+  </tr>
 </table>
 
 <div id="frontpup-credentials-input-container" style="<?php echo ( isset( $settings['clear_cache_enabled'] ) && $settings['clear_cache_enabled'] ) ? '' : 'display:none;'; ?>">

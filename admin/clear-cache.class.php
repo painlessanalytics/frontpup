@@ -13,6 +13,7 @@ class FrontPup_Admin_Clear_Cache extends FrontPup_Admin_Base {
   protected $settings = [];
   protected $settings_defaults = [
     'clear_cache_enabled' => 0,
+    'tag_based_caching_enabled' => 0,
     'distribution_id' => '',
     'credentials_mode' => 'policy', // 'policy' or 'wpconfig' or 'database'
     'access_key_id' => '',
@@ -20,7 +21,7 @@ class FrontPup_Admin_Clear_Cache extends FrontPup_Admin_Base {
     'full_aws_sdk' => '',
   ];
 
-  protected $booleanFields = ['clear_cache_enabled'];
+  protected $booleanFields = ['clear_cache_enabled', 'tag_based_caching_enabled'];
   protected $numericFields = [];
   protected $stringFields = ['distribution_id', 'credentials_mode', 'access_key_id', 'secret_access_key', 'full_aws_sdk'];
   protected $view = 'clear-cache-settings';

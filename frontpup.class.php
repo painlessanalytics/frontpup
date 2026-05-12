@@ -65,6 +65,19 @@ class FrontPup {
             return;
         }
 
+        // Send cache tag header if tag-based caching is enabled
+        $clear_cache_settings = get_option( 'frontpup_clear_cache', [] );
+        if ( ! empty( $clear_cache_settings['tag_based_caching_enabled'] ) ) {
+            $cache_tag = $this->get_cache_tag();
+            if ( ! empty( $cache_tag ) ) {
+                header( "x-amz-meta-cache-tag: $cache_tag" );
+                // Send debug header if FRONTPUP_DEBUG is enabled
+                if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
+                    header( "X-Front-Pup-Cache-Tag: $cache_tag" );
+                }
+            }
+        }
+
         // If the logged in cookie is set
         if( defined('LOGGED_IN_COOKIE') && !empty($_COOKIE[LOGGED_IN_COOKIE]) ) {
             if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
@@ -210,6 +223,109 @@ class FrontPup {
         $hash = md5( $data );
 
         return $hash;
+    }
+
+    /**
+     * Get cache tag for current request
+     * 
+     * Detects the WordPress post type for the current request and returns a sanitized
+     * cache tag value suitable for CloudFront's tag-based invalidation feature.
+     * 
+     * Detection strategy (in priority order):
+     * 1. 404 or error pages → return 'error'
+     * 2. Homepage (is_home) → return 'home'
+     * 3. Search results (is_search) → return 'search'
+     * 4. Single post/page/CPT (is_singular) → return post type from queried object
+     * 5. Post type archive (is_post_type_archive) → return post type from query var
+     * 6. Category/tag/taxonomy archive → return 'archive'
+     * 7. Author archive (is_author) → return 'author'
+     * 8. Unknown context → return 'unknown'
+     * 
+     * @return string Sanitized cache tag value, or empty string for 404/error pages
+     */
+    private function get_cache_tag(): string {
+        global $wp_query;
+
+        // Check for 404 pages - no header should be sent
+        if ( is_404() ) {
+            return 'error';
+        }
+
+        // Check for WordPress error pages - no header should be sent
+        if ( is_wp_error( $wp_query ) || is_wp_error( $wp_query->get_queried_object() ) ) {
+            return 'error';
+        }
+
+        // Check for homepage
+        if ( is_home() ) {
+            return $this->sanitize_cache_tag( 'home' );
+        }
+
+        // Check for search results
+        if ( is_search() ) {
+            return $this->sanitize_cache_tag( 'search' );
+        }
+
+        // Check for singular posts/pages/CPTs
+        if ( is_singular() ) {
+            $queried_object = get_queried_object();
+            if ( $queried_object ) {
+                $post_type = get_post_type( $queried_object );
+                if ( $post_type ) {
+                    return $this->sanitize_cache_tag( $post_type );
+                }
+            }
+        }
+
+        // Check for post type archive
+        if ( is_post_type_archive() ) {
+            $post_type = get_query_var( 'post_type' );
+            if ( $post_type ) {
+                // get_query_var can return an array for multiple post types
+                if ( is_array( $post_type ) ) {
+                    $post_type = reset( $post_type );
+                }
+                return $this->sanitize_cache_tag( $post_type );
+            }
+        }
+
+        // Check for category, tag, or taxonomy archives
+        if ( is_category() || is_tag() || is_tax() ) {
+            return $this->sanitize_cache_tag( 'archive' );
+        }
+
+        // Check for author archive
+        if ( is_author() ) {
+            return $this->sanitize_cache_tag( 'author' );
+        }
+
+        // Default fallback for unknown contexts
+        return $this->sanitize_cache_tag( 'unknown' );
+    }
+
+    /**
+     * Sanitize cache tag value for CloudFront compliance
+     * 
+     * CloudFront tag-based invalidation requires cache tags to meet specific format requirements:
+     * - Only lowercase alphanumeric characters, hyphens, and underscores are allowed
+     * - Maximum length of 256 characters
+     * - Tags are case-insensitive (we normalize to lowercase)
+     * 
+     * @param string $tag Raw tag value (typically a WordPress post type slug)
+     * @return string Sanitized tag value, or 'unknown' if empty after sanitization
+     */
+    private function sanitize_cache_tag( string $tag ): string {
+        // Convert to lowercase
+        $tag = strtolower( $tag );
+        
+        // Remove invalid characters (keep alphanumeric, hyphens, underscores)
+        $tag = preg_replace( '/[^a-z0-9\-_]/', '', $tag );
+        
+        // Truncate to 256 characters
+        $tag = substr( $tag, 0, 256 );
+        
+        // Return 'unknown' if empty after sanitization
+        return empty( $tag ) ? 'unknown' : $tag;
     }
 };
 
