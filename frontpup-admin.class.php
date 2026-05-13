@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require_once plugin_dir_path( __FILE__ ) . 'admin/cache-control.class.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/clear-cache.class.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/clear-cache-by-tag.class.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/welcome.class.php';
 
 class FrontPup_Admin {
@@ -31,6 +32,7 @@ class FrontPup_Admin {
         $this->admin_views['welcome'] = new FrontPup_Admin_Welcome(); // __('Welcome', 'frontpup') );
         $this->admin_views['cache-control'] = new FrontPup_Admin_Cache_Control(); // __('Cache Control Settings', 'frontpup') );
         $this->admin_views['clear-cache'] = new FrontPup_Admin_Clear_Cache(); // __('Clear Cache Settings', 'frontpup') );
+        $this->admin_views['clear-cache-by-tag'] = new FrontPup_Admin_Clear_Cache_By_Tag();
        
         // Admin hooks
         add_action( 'admin_menu', [$this, 'admin_menu'] );
@@ -81,6 +83,18 @@ class FrontPup_Admin {
             'frontpup-clear-cache', // menu slug
             [$this->admin_views['clear-cache'], 'view']
         );
+
+        $clear_cache_settings = get_option( 'frontpup_clear_cache', [] );
+        if( ! empty( $clear_cache_settings['tag_based_caching_enabled'] ) ) {
+            add_submenu_page(
+                'frontpup-plugin',
+                __('Clear Cache by Post Type', 'frontpup'),
+                __('Clear Cache by Post Type', 'frontpup'),
+                'manage_options',
+                'frontpup-clear-cache-by-tag', // menu slug
+                [$this->admin_views['clear-cache-by-tag'], 'view']
+            );
+        }
     }
 
     /**
@@ -91,6 +105,7 @@ class FrontPup_Admin {
         $this->admin_views['welcome']->set_page_title( __('Welcome to FrontPup', 'frontpup') );
         $this->admin_views['cache-control']->set_page_title( __('Cache Settings', 'frontpup') );
         $this->admin_views['clear-cache']->set_page_title( __('Clear Cache Settings', 'frontpup') );
+        $this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Post Type', 'frontpup') );
 
         // Register settings for each admin view
         foreach( $this->admin_views as $view ) {

@@ -13,6 +13,15 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.6] - 2026-05-13
+
+Add support for the new CloudFront cache tags associated by WordPress post types.
+
+- Added new "Clear Cache by Post Type" submenu option to clear the site cache by post type as cache tags
+- Added new header `x-amz-meta-cache-tag` for post type pages
+- Special pages not post type specific also have tags: 'error' (for error and 404 pages), 'home', 'search', 'archive', and 'author'.
+- Unknown pages use the tag 'unknown'
+
 ## [1.5] - 2026-04-16
 
 Added new Cache Unique Visitors option.

@@ -20,8 +20,33 @@ class FrontPup_Clear_Cache {
 
   /**
    * Clear Cache method
+   * 
+   * @param array|null $tags Optional array of cache tags to invalidate.
+   *                         If null or empty, clears entire cache (/*).
+   *                         If array, converts to tag-based paths (#tag).
+   * @return bool True on success, false on failure
    */
-  public function clear_cache() {
+  public function clear_cache( $tags = null ) {
+    // Convert empty array to null
+    if ( is_array( $tags ) && empty( $tags ) ) {
+      $tags = null;
+    }
+
+    // Build invalidation paths
+    if ( $tags === null ) {
+      $paths = ['/*'];  // Clear entire cache
+    } else {
+      $paths = [];
+      foreach ( $tags as $tag ) {
+        $paths[] = '#' . $tag;
+      }
+    }
+
+    // Debug logging
+    if ( defined( 'FRONTPUP_DEBUG' ) && FRONTPUP_DEBUG ) {
+      error_log( 'FrontPup Clear Cache by Post Type: Invalidation paths = ' . print_r( $paths, true ) );
+    }
+
     // Implement the logic to clear the cache using AWS CloudFront API
     $initOptions = ['version' => 'latest', 'region'  => FRONTPUP_REGION ];
 
@@ -91,8 +116,8 @@ class FrontPup_Clear_Cache {
             'InvalidationBatch' => [
                 'CallerReference' => (string) time(),
                 'Paths' => [
-                    'Quantity' => 1,
-                    'Items' => ['/*'],
+                    'Quantity' => count($paths),
+                    'Items' => $paths,
                 ],
             ],
         ]);
@@ -121,7 +146,7 @@ class FrontPup_Clear_Cache {
  
       try {
         $cf = new LightAWS_CloudFront_WP( $initOptions );
-        $this->result = $cf->createInvalidation($this->settings['distribution_id'], ['/*'] );
+        $this->result = $cf->createInvalidation($this->settings['distribution_id'], $paths );
  
       } catch (\Exception $e) {
         $this->set_last_error( $e->getMessage() );
