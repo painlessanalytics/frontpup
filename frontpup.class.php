@@ -49,6 +49,19 @@ class FrontPup {
         // Set the unique visitor cookie for authenticated users (if enabled)
         $this->set_unique_visitor_cookie();
 
+        // Send cache tag header if tag-based caching is enabled
+        $clear_cache_settings = get_option( 'frontpup_clear_cache', [] );
+        if ( ! empty( $clear_cache_settings['tag_based_caching_enabled'] ) ) {
+            $cache_tag = $this->get_cache_tag();
+            if ( ! empty( $cache_tag ) ) {
+                header( "x-amz-meta-cache-tag: $cache_tag" );
+                // Send debug header if FRONTPUP_DEBUG is enabled
+                if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
+                    header( "X-Front-Pup-Cache-Tag: $cache_tag" );
+                }
+            }
+        }
+
         // If this is 404 page, do not change the cache headers
         if ( is_404() ) {
             if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
@@ -63,19 +76,6 @@ class FrontPup {
                 header( 'X-Front-Pup: error-page' );
             }
             return;
-        }
-
-        // Send cache tag header if tag-based caching is enabled
-        $clear_cache_settings = get_option( 'frontpup_clear_cache', [] );
-        if ( ! empty( $clear_cache_settings['tag_based_caching_enabled'] ) ) {
-            $cache_tag = $this->get_cache_tag();
-            if ( ! empty( $cache_tag ) ) {
-                header( "x-amz-meta-cache-tag: $cache_tag" );
-                // Send debug header if FRONTPUP_DEBUG is enabled
-                if( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
-                    header( "X-Front-Pup-Cache-Tag: $cache_tag" );
-                }
-            }
         }
 
         // If the logged in cookie is set

@@ -75,7 +75,7 @@ The implementation follows the existing FrontPup architecture:
 
 - [x] 4. Override view() method to handle form submission
   - Add `view()` public method to `FrontPup_Admin_Clear_Cache_By_Tag` class
-  - Method signature: `public function view(): void`
+  - Method signature: `public function view()`
   - Call `process_form_submission()` at the beginning
   - Get public post types using `get_public_post_types()`
   - Get special tags using `get_special_tags()`

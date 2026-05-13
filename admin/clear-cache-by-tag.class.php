@@ -26,7 +26,7 @@ class FrontPup_Admin_Clear_Cache_By_Tag extends FrontPup_Admin_Base {
 	 * 
 	 * @return void
 	 */
-	public function view(): void {
+	public function view() {
 		// Process form submission if present
 		$this->process_form_submission();
 

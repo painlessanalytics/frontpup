@@ -23,7 +23,7 @@ class FrontPup_Clear_Cache {
    * 
    * @param array|null $tags Optional array of cache tags to invalidate.
    *                         If null or empty, clears entire cache (/*).
-   *                         If array, converts to tag-based paths (tag:value/*).
+   *                         If array, converts to tag-based paths (#tag).
    * @return bool True on success, false on failure
    */
   public function clear_cache( $tags = null ) {

@@ -92,9 +92,9 @@ ul.frontpup-post-types {
 			<?php
 			$args = array(
 			    'public'   => true,
-			    '_builtin' => false
+			    '_builtin' => true
 			);
-			$post_types = get_post_types(array('public' => true, '_builtin' => true), 'names');
+			$post_types = get_post_types($args, 'names');
 			foreach ( $post_types  as $post_type ) {
 		        echo '<li><i>' . $post_type . '</i></li>';
 		    }

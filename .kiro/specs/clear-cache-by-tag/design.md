@@ -109,7 +109,7 @@ protected $stringFields = [];
  * Override view() to handle form submission
  * Does not use WordPress Settings API (no settings to save)
  */
-public function view(): void
+public function view()
 
 /**
  * Process form submission
@@ -117,7 +117,7 @@ public function view(): void
  * 
  * @return void
  */
-private function process_form_submission(): void
+private function process_form_submission()
 
 /**
  * Get all public post types
@@ -250,7 +250,7 @@ $this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Pos
  * 
  * @param array|null $tags Optional array of cache tags to invalidate.
  *                         If null or empty, clears entire cache (/*).
- *                         If array, converts to tag-based paths (tag:value/*).
+ *                         If array, converts to tag-based paths (#tag).
  * @return bool True on success, false on failure
  */
 public function clear_cache( ?array $tags = null ): bool
