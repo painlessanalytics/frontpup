@@ -1,6 +1,6 @@
 <?php
 /**
- * Clear Cache by Tag Settings View
+ * Clear Cache by Post Type Settings View
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly

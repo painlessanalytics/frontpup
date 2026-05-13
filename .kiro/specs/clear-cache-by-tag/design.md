@@ -1,12 +1,12 @@
-# Design Document: Clear Cache by Tag
+# Design Document: Clear Cache by Post Type
 
 ## Overview
 
-This design implements a "Clear Cache by Tag" admin page for the FrontPup WordPress plugin, enabling selective CloudFront cache invalidation based on cache tags. The implementation builds on the existing tag-based caching infrastructure (from the tag-based-caching spec) which sends `x-amz-meta-cache-tag` headers with post type values. This feature provides a WordPress admin interface for invalidating specific tagged content rather than clearing the entire cache.
+This design implements a "Clear Cache by Post Type" admin page for the FrontPup WordPress plugin, enabling selective CloudFront cache invalidation based on cache tags. The implementation builds on the existing tag-based caching infrastructure (from the tag-based-caching spec) which sends `x-amz-meta-cache-tag` headers with post type values. This feature provides a WordPress admin interface for invalidating specific tagged content rather than clearing the entire cache.
 
 ### Feature Summary
 
-- **Admin Page**: New submenu page "Clear Cache by Tag" under FrontPup menu
+- **Admin Page**: New submenu page "Clear Cache by Post Type" under FrontPup menu
 - **Two-Column Layout**: Public post types in left column, special tags in right column
 - **Selective Invalidation**: Checkboxes allow selecting specific tags to invalidate
 - **Full Cache Clear**: When no tags selected, entire cache is cleared (fallback behavior)
@@ -28,7 +28,7 @@ This design implements a "Clear Cache by Tag" admin page for the FrontPup WordPr
 
 ```mermaid
 graph TD
-    A[Admin User] --> B[Clear Cache by Tag Page]
+    A[Admin User] --> B[Clear Cache by Post Type Page]
     B --> C{Form Submitted?}
     C -->|No| D[Display Checkboxes]
     C -->|Yes| E[Verify Nonce & Capability]
@@ -66,7 +66,7 @@ graph TD
 
 | Component | Integration Method | Purpose |
 |-----------|-------------------|---------|
-| `FrontPup_Admin` | Add new submenu page | Register "Clear Cache by Tag" page |
+| `FrontPup_Admin` | Add new submenu page | Register "Clear Cache by Post Type" page |
 | `FrontPup_Admin_Clear_Cache_By_Tag` | New class extending `FrontPup_Admin_Base` | Controller for new admin page |
 | `admin/views/clear-cache-by-tag-settings.php` | New view template | Render two-column checkbox layout |
 | `FrontPup_Clear_Cache::clear_cache()` | Add `$tags` parameter | Accept tag array for selective invalidation |
@@ -83,7 +83,7 @@ graph TD
 **Extends**: `FrontPup_Admin_Base`
 
 **Responsibilities**:
-- Display the Clear Cache by Tag admin page
+- Display the Clear Cache by Post Type admin page
 - Handle form submission and tag collection
 - Verify nonces and capability checks
 - Call `clear_cache()` with selected tags
@@ -154,7 +154,7 @@ private function get_special_tags(): array
 **Layout Structure**:
 ```html
 <div class="wrap frontpup-settings">
-  <h1>Clear Cache by Tag</h1>
+  <h1>Clear Cache by Post Type</h1>
   <?php settings_errors(); ?>
   
   <form method="post" action="">
@@ -226,15 +226,15 @@ $this->admin_views['clear-cache-by-tag'] = new FrontPup_Admin_Clear_Cache_By_Tag
 // In admin_menu(), add new submenu page
 add_submenu_page(
     'frontpup-plugin',
-    __('Clear Cache by Tag', 'frontpup'),
-    __('Clear Cache by Tag', 'frontpup'),
+    __('Clear Cache by Post Type', 'frontpup'),
+    __('Clear Cache by Post Type', 'frontpup'),
     'manage_options',
     'frontpup-clear-cache-by-tag',
     [$this->admin_views['clear-cache-by-tag'], 'view']
 );
 
 // In admin_init(), set page title
-$this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Tag', 'frontpup') );
+$this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Post Type', 'frontpup') );
 ```
 
 ### 4. Clear Cache Modification Component
@@ -520,8 +520,8 @@ When `FRONTPUP_DEBUG` is defined and truthy:
 **Debug Output Example**:
 ```php
 if ( defined('FRONTPUP_DEBUG') && FRONTPUP_DEBUG ) {
-    error_log( 'FrontPup Clear Cache by Tag: Selected tags = ' . print_r($tags, true) );
-    error_log( 'FrontPup Clear Cache by Tag: Invalidation paths = ' . print_r($paths, true) );
+    error_log( 'FrontPup Clear Cache by Post Type: Selected tags = ' . print_r($tags, true) );
+    error_log( 'FrontPup Clear Cache by Post Type: Invalidation paths = ' . print_r($paths, true) );
 }
 ```
 
@@ -695,7 +695,7 @@ Instead, use **example-based unit tests** with WordPress test framework (WP_Unit
 30. **Test: Menu integration**
     - Setup: Log in as admin
     - Action: Navigate to FrontPup menu
-    - Assert: "Clear Cache by Tag" submenu item is visible
+    - Assert: "Clear Cache by Post Type" submenu item is visible
 
 ### Manual Testing Checklist
 

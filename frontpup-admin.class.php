@@ -88,8 +88,8 @@ class FrontPup_Admin {
         if( ! empty( $clear_cache_settings['tag_based_caching_enabled'] ) ) {
             add_submenu_page(
                 'frontpup-plugin',
-                __('Clear Cache by Tag', 'frontpup'),
-                __('Clear Cache by Tag', 'frontpup'),
+                __('Clear Cache by Post Type', 'frontpup'),
+                __('Clear Cache by Post Type', 'frontpup'),
                 'manage_options',
                 'frontpup-clear-cache-by-tag', // menu slug
                 [$this->admin_views['clear-cache-by-tag'], 'view']
@@ -105,7 +105,7 @@ class FrontPup_Admin {
         $this->admin_views['welcome']->set_page_title( __('Welcome to FrontPup', 'frontpup') );
         $this->admin_views['cache-control']->set_page_title( __('Cache Settings', 'frontpup') );
         $this->admin_views['clear-cache']->set_page_title( __('Clear Cache Settings', 'frontpup') );
-        $this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Tag', 'frontpup') );
+        $this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Post Type', 'frontpup') );
 
         // Register settings for each admin view
         foreach( $this->admin_views as $view ) {

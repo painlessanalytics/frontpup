@@ -44,7 +44,7 @@ class FrontPup_Clear_Cache {
 
     // Debug logging
     if ( defined( 'FRONTPUP_DEBUG' ) && FRONTPUP_DEBUG ) {
-      error_log( 'FrontPup Clear Cache by Tag: Invalidation paths = ' . print_r( $paths, true ) );
+      error_log( 'FrontPup Clear Cache by Post Type: Invalidation paths = ' . print_r( $paths, true ) );
     }
 
     // Implement the logic to clear the cache using AWS CloudFront API

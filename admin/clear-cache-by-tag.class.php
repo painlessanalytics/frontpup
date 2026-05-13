@@ -1,6 +1,6 @@
 <?php
 /**
- * FrontPup Admin Clear Cache by Tag Class
+ * FrontPup Admin Clear Cache by Post Type Class
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -20,7 +20,7 @@ class FrontPup_Admin_Clear_Cache_By_Tag extends FrontPup_Admin_Base {
 	protected $stringFields = [];
 
 	/**
-	 * View: Display the Clear Cache by Tag page
+	 * View: Display the Clear Cache by Post Type page
 	 * 
 	 * Overrides parent view() to handle form submission directly
 	 * 
@@ -135,7 +135,7 @@ class FrontPup_Admin_Clear_Cache_By_Tag extends FrontPup_Admin_Base {
 
 		// Debug logging
 		if ( defined( 'FRONTPUP_DEBUG' ) && FRONTPUP_DEBUG ) {
-			error_log( 'FrontPup Clear Cache by Tag: Selected tags = ' . print_r( $tags, true ) );
+			error_log( 'FrontPup Clear Cache by Post Type: Selected tags = ' . print_r( $tags, true ) );
 		}
 
 		// Call clear_cache with tags

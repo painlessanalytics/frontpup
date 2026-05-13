@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document specifies the requirements for adding a "Clear Cache by Tag" feature to the FrontPup WordPress plugin. This feature builds on the existing tag-based caching infrastructure (implemented in tag-based-caching spec) which sends `x-amz-meta-cache-tag` headers with post type values. The new feature will provide a WordPress admin interface for selectively invalidating CloudFront cache by specific tags, enabling more granular cache management than the existing "clear entire cache" functionality.
+This document specifies the requirements for adding a "Clear Cache by Post Type" feature to the FrontPup WordPress plugin. This feature builds on the existing tag-based caching infrastructure (implemented in tag-based-caching spec) which sends `x-amz-meta-cache-tag` headers with post type values. The new feature will provide a WordPress admin interface for selectively invalidating CloudFront cache by specific tags, enabling more granular cache management than the existing "clear entire cache" functionality.
 
 ## Glossary
 
@@ -12,7 +12,7 @@ This document specifies the requirements for adding a "Clear Cache by Tag" featu
 - **Post_Type**: WordPress content type (e.g., 'post', 'page', 'product')
 - **Public_Post_Type**: A WordPress post type registered with 'public' => true
 - **Special_Tag**: Predefined cache tags for non-post-type pages: 'error', 'home', 'search', 'archive', 'author', 'unknown'
-- **Admin_Page**: The "Clear Cache by Tag" submenu page under the FrontPup admin menu
+- **Admin_Page**: The "Clear Cache by Post Type" submenu page under the FrontPup admin menu
 - **Admin_User**: WordPress user with 'manage_options' capability
 - **Clear_Cache_Function**: The FrontPup_Clear_Cache::clear_cache() method that creates CloudFront invalidations
 - **Invalidation_Path**: CloudFront path pattern used for cache invalidation (e.g., '/tag:post/*', '/*')
@@ -27,8 +27,8 @@ This document specifies the requirements for adding a "Clear Cache by Tag" featu
 #### Acceptance Criteria
 
 1. THE FrontPup SHALL create a submenu page under the 'frontpup-plugin' menu using add_submenu_page
-2. THE FrontPup SHALL set the submenu page title to "Clear Cache by Tag"
-3. THE FrontPup SHALL set the submenu menu title to "Clear Cache by Tag"
+2. THE FrontPup SHALL set the submenu page title to "Clear Cache by Post Type"
+3. THE FrontPup SHALL set the submenu menu title to "Clear Cache by Post Type"
 4. THE FrontPup SHALL require 'manage_options' capability to access the submenu page
 5. WHEN the Admin_User clicks the submenu item, THE FrontPup SHALL display the Admin_Page
 
@@ -254,8 +254,8 @@ This document specifies the requirements for adding a "Clear Cache by Tag" featu
 
 #### Acceptance Criteria
 
-1. THE FrontPup SHALL add the "Clear Cache by Tag" submenu after the existing FrontPup submenu items
+1. THE FrontPup SHALL add the "Clear Cache by Post Type" submenu after the existing FrontPup submenu items
 2. THE FrontPup SHALL use the same menu icon and styling as other FrontPup submenu items
-3. WHEN the Admin_User hovers over the FrontPup menu, THE FrontPup SHALL display "Clear Cache by Tag" in the submenu list
-4. THE FrontPup SHALL highlight the "Clear Cache by Tag" submenu item when the Admin_Page is active
+3. WHEN the Admin_User hovers over the FrontPup menu, THE FrontPup SHALL display "Clear Cache by Post Type" in the submenu list
+4. THE FrontPup SHALL highlight the "Clear Cache by Post Type" submenu item when the Admin_Page is active
 5. THE FrontPup SHALL use the slug 'frontpup-clear-cache-by-tag' for the submenu page

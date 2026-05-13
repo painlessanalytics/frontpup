@@ -1,8 +1,8 @@
-# Implementation Plan: Clear Cache by Tag
+# Implementation Plan: Clear Cache by Post Type
 
 ## Overview
 
-This implementation plan breaks down the "Clear Cache by Tag" feature into discrete coding tasks. The feature adds a new admin page that allows WordPress administrators to selectively invalidate CloudFront cache by specific tags (post types and special tags) rather than clearing the entire cache.
+This implementation plan breaks down the "Clear Cache by Post Type" feature into discrete coding tasks. The feature adds a new admin page that allows WordPress administrators to selectively invalidate CloudFront cache by specific tags (post types and special tags) rather than clearing the entire cache.
 
 The implementation follows the existing FrontPup architecture:
 - Creates a new admin controller class extending `FrontPup_Admin_Base`
@@ -15,7 +15,7 @@ The implementation follows the existing FrontPup architecture:
 
 ## Tasks
 
-- [x] 1. Create admin controller class for Clear Cache by Tag page
+- [x] 1. Create admin controller class for Clear Cache by Post Type page
   - Create new file `admin/clear-cache-by-tag.class.php`
   - Define class `FrontPup_Admin_Clear_Cache_By_Tag` extending `FrontPup_Admin_Base`
   - Set `$settings_key = ''` (no settings stored)
@@ -86,11 +86,11 @@ The implementation follows the existing FrontPup architecture:
 - [x] 5. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 6. Create view template for Clear Cache by Tag page
+- [x] 6. Create view template for Clear Cache by Post Type page
   - Create new file `admin/views/clear-cache-by-tag-settings.php`
   - Add ABSPATH check at top
   - Create wrapper div with class `wrap frontpup-settings`
-  - Add h1 heading: "Clear Cache by Tag"
+  - Add h1 heading: "Clear Cache by Post Type"
   - Call `settings_errors()` to display feedback messages
   - Create form with method="post" and action=""
   - Add nonce field using `wp_nonce_field('frontpup_clear_cache_by_tag_action', 'frontpup_clear_cache_by_tag_nonce')`
@@ -153,8 +153,8 @@ The implementation follows the existing FrontPup architecture:
   - Key: `'clear-cache-by-tag'`, Value: `new FrontPup_Admin_Clear_Cache_By_Tag()`
   - In `admin_menu()` method, add new submenu page using `add_submenu_page()`
   - Parent slug: `'frontpup-plugin'`
-  - Page title: `__('Clear Cache by Tag', 'frontpup')`
-  - Menu title: `__('Clear Cache by Tag', 'frontpup')`
+  - Page title: `__('Clear Cache by Post Type', 'frontpup')`
+  - Menu title: `__('Clear Cache by Post Type', 'frontpup')`
   - Capability: `'manage_options'`
   - Menu slug: `'frontpup-clear-cache-by-tag'`
   - Callback: `[$this->admin_views['clear-cache-by-tag'], 'view']`
@@ -265,9 +265,9 @@ The implementation follows the existing FrontPup architecture:
 
 - [x] 17. Add debug logging support (optional enhancement)
   - In `process_form_submission()`, add debug logging when `FRONTPUP_DEBUG` is defined
-  - Log selected tags before processing: `error_log('FrontPup Clear Cache by Tag: Selected tags = ' . print_r($tags, true))`
+  - Log selected tags before processing: `error_log('FrontPup Clear Cache by Post Type: Selected tags = ' . print_r($tags, true))`
   - In `clear_cache()`, log converted invalidation paths when `FRONTPUP_DEBUG` is defined
-  - Log: `error_log('FrontPup Clear Cache by Tag: Invalidation paths = ' . print_r($paths, true))`
+  - Log: `error_log('FrontPup Clear Cache by Post Type: Invalidation paths = ' . print_r($paths, true))`
   - _Requirements: N/A (enhancement for debugging)_
 
 - [x] 18. Final checkpoint - Ensure all tests pass
@@ -308,7 +308,7 @@ This feature uses **example-based unit tests** (not property-based testing) beca
 - Validates specific tag-to-path conversion patterns
 
 Manual testing checklist:
-- [ ] Submenu "Clear Cache by Tag" appears in FrontPup admin menu
+- [ ] Submenu "Clear Cache by Post Type" appears in FrontPup admin menu
 - [ ] Page displays all public post types with checkboxes
 - [ ] Page displays all special tags with checkboxes
 - [ ] Two-column layout renders correctly
