@@ -43,17 +43,51 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
       <p>
         <?php echo esc_html( __('The plugin will add the x-amz-meta-cache-tag header with the post type. Special tags are used for non post-type pages.', 'frontpup') ); ?>
       </p>
+      <p>
+        <?php echo esc_html( __('Note: Your distribution must have the `Use cache tags for cache invalidation` option enabled with the default header value `x-amz-meta-cache-tag`.', 'frontpup') ); ?>
+      </p>
 <style>
+.frontpup-post-types-box {
+	display: flex;
+	gap: 40px;
+	margin: 0;
+}
+.frontpup-column {
+	flex: 1;
+}
+
+.frontpup-column h4 {
+	font-size: 1.1em;
+	margin-bottom: 10px;
+}
+
+.frontpup-column ul {
+  padding-bottom: 0; 
+}
+
+.frontpup-column label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.frontpup-column-1 {
+	max-width: 200px;
+}
+
 .frontpup-post-types-box {
 	padding-left: 24px;	
 }
+
 ul.frontpup-post-types {
     list-style-type: disc !important;
     padding-left: 20px !important;
 }
 </style>
-      <div class="frontpup-post-types-box">
-  			<h4><?php echo esc_html__('Public Post Types', 'frontpup'); ?></h4>
+    <div class="frontpup-post-types-box">
+
+      <div class="frontpup-column frontpup-column-1">
+  		<h4><?php echo esc_html__('Public Post Types', 'frontpup'); ?></h4>
+      
 			<ul class="frontpup-post-types">
 			<?php
 			$args = array(
@@ -66,16 +100,19 @@ ul.frontpup-post-types {
 		    }
 			?>
 			</ul>
-      		<h4><?php echo esc_html__('Special tags', 'frontpup'); ?></h4>
-        	<ul class="frontpup-post-types">
-        	  	<li><i>error</i></li>
-        	  	<li><i>home</i></li>
-        	  	<li><i>search</i></li>
-        	  	<li><i>archive</i></li>
-        	  	<li><i>author</i></li>
-        	  	<li><i>unknown</i></li>
-        	</ul>
       </div>
+      <div class="frontpup-column">
+      <h4><?php echo esc_html__('Special tags', 'frontpup'); ?></h4>
+      <ul class="frontpup-post-types">
+          <li><i>error</i></li>
+          <li><i>home</i></li>
+          <li><i>search</i></li>
+          <li><i>archive</i></li>
+          <li><i>author</i></li>
+          <li><i>unknown</i></li>
+      </ul>
+      <div>
+    </div>
     </td>
   </tr>
 </table>

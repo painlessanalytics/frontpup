@@ -4,7 +4,7 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.5
+Stable tag: 1.6
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -113,17 +113,30 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 
 == Screenshots ==
 
-1. Super simple Podcast Episode Gutenberg block
-2. Settings page example, confirming you are good to go (or not)
-3. Settings page example continued, subscribe links
-4. Episode Player example
-5. Episode player Subscribe pop-up box
+1. Welcome to FrontPup with CloudFront
+2. Welcome screen without CloudFront
+3. Page Cache-Control settings
+4. Clear cache settings
+5. Non-intrusive Clear CloudFront cache from WordPress admin bar
+6. Non-intrusive Clear CloudFront cache from WordPress admin bar processing...
+7. Non-intrusive Clear CloudFront cache from WordPress admin bar successful!
+8. Non-intrusive Clear CloudFront cache from WordPress admin bar error
+9. New Clear Cache by Tag option
 
 == Changelog ==
 
 The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
 Changelog
+
+ = 1.6 =
+
+ Add support for the new CloudFront cache tags associated by WordPress post types.
+
+- Added new "Clear Cache by Tag" submenu option to clear the site cache by post type as cache tags
+- Added new header `x-amz-meta-cache-tag` for post type pages
+- Special pages not post type specific also have tags: 'error' (for error and 404 pages), 'home', 'search', 'archive', and 'author'.
+- Unknown pages use the tag 'unknown'
 
  = 1.5 =
  
