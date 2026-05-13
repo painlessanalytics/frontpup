@@ -25,6 +25,7 @@ You __must__ be using the Amazon Web Services (AWS) [CloudFront](https://aws.ama
 
 * Non-intrusive Clear Cache (new) admin bar menu option, now you can clear the cache in any view without impacting other work.
 * Clear CloudFront Cache (creates an Invalidation request)
+* Utilize the new Cache Tags feature by WordPress post-type
 * Set no-cache headers for all pages (great for development or testing)
 * Set public and private Cache-Control headers for caching in CloudFront and Browsers
 * Set separate max-age (browser) and s-maxage (CloudFront) cache duration values
@@ -34,6 +35,9 @@ The Non-intrusive Clear Cache admin bar menu option can clear your cache in any 
 
 == Turbocharge your WordPress Website with CloudFront ==
 Using Amazon CloudFront in front of your WordPress website offers significant benefits by improving performance, security, and scalability. CloudFront is a Delivery Network (CDN) with over 750+ Points of Presence (PoPs) around the world plus over 1,100 PoPs within ISP networks. This highly optimized network makes it _extremely efficient_ at delivering your website to your visitors anywhere around the world. "PoP" locations are designed to reduce latency by caching content closer to your site's visitors.
+
+== Cache Tags by Post Type ==
+The new Cache Tags in CloudFront paired with WordPress's Post Types is a killer combination! If you have a lot of pages to your site and you only want to clear specific areas, this is the perfect option for you. For exmaple, if you are using a custom post type for your shopping cart and you want to purge the cache for product pages but want your post and pages to not be impacted, this new feature is for you!
 
 **Performance**
 
@@ -127,16 +131,20 @@ There are thousands of formulas online that explain how to host WordPress on AWS
 
 The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytics/frontpup](https://github.com/painlessanalytics/frontpup). Code contributions are welcome.
 
+The FrontPup plugin is developed with assistance from [Kiro](https://kiro.dev), an AI-powered agentic IDE.
+
 Changelog
 
  = 1.6 =
 
+ Released: 2026-05-13
+
  Add support for the new CloudFront cache tags associated by WordPress post types.
 
-- Added new "Clear Cache by Tag" submenu option to clear the site cache by post type as cache tags
-- Added new header `x-amz-meta-cache-tag` for post type pages
-- Special pages not post type specific also have tags: 'error' (for error and 404 pages), 'home', 'search', 'archive', and 'author'.
-- Unknown pages use the tag 'unknown'
+ - Added new "Clear Cache by Tag" submenu option to clear the site cache by post type as cache tags
+ - Added new header `x-amz-meta-cache-tag` for post type pages
+ - Special pages not post type specific also have tags: 'error' (for error and 404 pages), 'home', 'search', 'archive', and 'author'.
+ - Unknown pages use the tag 'unknown'
 
  = 1.5 =
  
