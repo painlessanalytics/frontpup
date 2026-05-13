@@ -37,7 +37,7 @@ The Non-intrusive Clear Cache admin bar menu option can clear your cache in any 
 Using Amazon CloudFront in front of your WordPress website offers significant benefits by improving performance, security, and scalability. CloudFront is a Delivery Network (CDN) with over 750+ Points of Presence (PoPs) around the world plus over 1,100 PoPs within ISP networks. This highly optimized network makes it _extremely efficient_ at delivering your website to your visitors anywhere around the world. "PoP" locations are designed to reduce latency by caching content closer to your site's visitors.
 
 == Cache Tags by Post Type ==
-The new Cache Tags in CloudFront paired with WordPress's Post Types is a killer combination! If you have a lot of pages to your site and you only want to clear specific areas, this is the perfect option for you. For exmaple, if you are using a custom post type for your shopping cart and you want to purge the cache for product pages but want your post and pages to not be impacted, this new feature is for you!
+The new Cache Tags in CloudFront paired with WordPress's Post Types is a killer combination! If you have a lot of pages to your site and you only want to clear specific areas, this is the perfect option for you. For example, if you are using a custom post type for your shopping cart and you want to purge the cache for product pages but want your post and pages to not be impacted, this new feature is for you!
 
 **Performance**
 
