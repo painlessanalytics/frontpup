@@ -13,6 +13,12 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.6.1] - 2026-05-24
+
+WordPress 7.0 support.
+
+* Tested with WordPress 7.0 
+
 ## [1.6] - 2026-05-13
 
 Add support for the new CloudFront cache tags associated by WordPress post types.
