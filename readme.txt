@@ -3,8 +3,8 @@ Contributors: painlessanalytics, amandato
 Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 1.6
+Tested up to: 7.0
+Stable tag: 1.6.1
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,13 @@ The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytic
 The FrontPup plugin is developed with assistance from [Kiro](https://kiro.dev), an AI-powered agentic IDE.
 
 Changelog
+
+ = 1.6.1 =
+
+ WordPress 7.0.
+  
+ - Released: 2026-05-24
+ - Tested with WordPress 7.0
 
  = 1.6 =
 
