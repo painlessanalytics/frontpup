@@ -17,7 +17,7 @@ TBD
 
 WordPress 7.0 support.
 
-* Tested with WordPress 7.0 
+- Tested with WordPress 7.0
 
 ## [1.6] - 2026-05-13
 
