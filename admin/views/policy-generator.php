@@ -127,7 +127,8 @@ $_distribution_id  = isset( $_POST['frontpup_distribution_id'] ) ? sanitize_text
 					<span class="dashicons dashicons-clipboard"></span>
 					<?php esc_html_e( 'Copy', 'frontpup' ); ?>
 				</button>
-				<span class="frontpup-copy-feedback" id="frontpup-copy-feedback" style="display:none;">
+				<span class="frontpup-copy-feedback" id="frontpup-copy-feedback" style="display:none;"
+					aria-live="polite" aria-atomic="true">
 					<?php esc_html_e( 'Copied!', 'frontpup' ); ?>
 				</span>
 			</div>

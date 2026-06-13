@@ -5,6 +5,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+require_once plugin_dir_path( __FILE__ ) . 'base.class.php';
+
 class FrontPup_Admin_Policy_Generator extends FrontPup_Admin_Base {
 
 	protected $settings_key = '';
@@ -62,7 +64,12 @@ class FrontPup_Admin_Policy_Generator extends FrontPup_Admin_Base {
 		}
 
 		if ( ! empty( $distribution_id ) ) {
-			$resource = 'arn:aws:cloudfront::' . $account_id . ':distribution/' . $distribution_id;
+			// CloudFront distribution IDs are uppercase alphanumeric (e.g. EDFDVBD6EXAMPLE)
+			if ( ! preg_match( '/^[A-Z0-9]+$/i', $distribution_id ) ) {
+				$this->form_error = __( 'Distribution ID must contain only letters and numbers (e.g. EDFDVBD6EXAMPLE).', 'frontpup' );
+				return;
+			}
+			$resource = 'arn:aws:cloudfront::' . $account_id . ':distribution/' . strtoupper( $distribution_id );
 		} else {
 			$resource = 'arn:aws:cloudfront::' . $account_id . ':distribution/*';
 		}
