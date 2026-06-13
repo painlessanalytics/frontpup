@@ -8,6 +8,7 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/cache-control.class.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/clear-cache.class.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/clear-cache-by-tag.class.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/welcome.class.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/policy-generator.class.php';
 
 class FrontPup_Admin {
 
@@ -33,6 +34,7 @@ class FrontPup_Admin {
         $this->admin_views['cache-control'] = new FrontPup_Admin_Cache_Control(); // __('Cache Control Settings', 'frontpup') );
         $this->admin_views['clear-cache'] = new FrontPup_Admin_Clear_Cache(); // __('Clear Cache Settings', 'frontpup') );
         $this->admin_views['clear-cache-by-tag'] = new FrontPup_Admin_Clear_Cache_By_Tag();
+        $this->admin_views['policy-generator'] = new FrontPup_Admin_Policy_Generator();
        
         // Admin hooks
         add_action( 'admin_menu', [$this, 'admin_menu'] );
@@ -95,6 +97,15 @@ class FrontPup_Admin {
                 [$this->admin_views['clear-cache-by-tag'], 'view']
             );
         }
+
+        add_submenu_page(
+            'frontpup-plugin',
+            __('Policy Generator', 'frontpup'),
+            __('Policy Generator', 'frontpup'),
+            'manage_options',
+            'frontpup-policy-generator', // menu slug
+            [$this->admin_views['policy-generator'], 'view']
+        );
     }
 
     /**
@@ -106,6 +117,7 @@ class FrontPup_Admin {
         $this->admin_views['cache-control']->set_page_title( __('Cache Settings', 'frontpup') );
         $this->admin_views['clear-cache']->set_page_title( __('Clear Cache Settings', 'frontpup') );
         $this->admin_views['clear-cache-by-tag']->set_page_title( __('Clear Cache by Post Type', 'frontpup') );
+        $this->admin_views['policy-generator']->set_page_title( __('Policy Generator', 'frontpup') );
 
         // Register settings for each admin view
         foreach( $this->admin_views as $view ) {
