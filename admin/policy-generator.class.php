@@ -64,7 +64,7 @@ class FrontPup_Admin_Policy_Generator extends FrontPup_Admin_Base {
 		}
 
 		if ( ! empty( $distribution_id ) ) {
-			// CloudFront distribution IDs are uppercase alphanumeric (e.g. EDFDVBD6EXAMPLE)
+			// CloudFront distribution IDs are alphanumeric; input is accepted in any case and normalized to uppercase in the ARN
 			if ( ! preg_match( '/^[A-Z0-9]+$/i', $distribution_id ) ) {
 				$this->form_error = __( 'Distribution ID must contain only letters and numbers (e.g. EDFDVBD6EXAMPLE).', 'frontpup' );
 				return;
@@ -74,7 +74,7 @@ class FrontPup_Admin_Policy_Generator extends FrontPup_Admin_Base {
 			$resource = 'arn:aws:cloudfront::' . $account_id . ':distribution/*';
 		}
 
-		$this->generated_policy = json_encode(
+		$encoded = json_encode(
 			[
 				'Version'   => '2012-10-17',
 				'Statement' => [
@@ -91,6 +91,13 @@ class FrontPup_Admin_Policy_Generator extends FrontPup_Admin_Base {
 			],
 			JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 		);
+
+		if ( $encoded === false ) {
+			$this->form_error = __( 'Failed to generate policy. Please try again.', 'frontpup' );
+			return;
+		}
+
+		$this->generated_policy = $encoded;
 	}
 
 	/**

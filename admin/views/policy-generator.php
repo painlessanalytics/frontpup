@@ -143,16 +143,21 @@ $_distribution_id  = isset( $_POST['frontpup_distribution_id'] ) ? sanitize_text
 		document.getElementById('frontpup-copy-btn').addEventListener('click', function() {
 			var textarea = document.getElementById('frontpup-policy-output');
 			var feedback = document.getElementById('frontpup-copy-feedback');
-			if ( navigator.clipboard && navigator.clipboard.writeText ) {
-				navigator.clipboard.writeText(textarea.value).then(function() {
-					feedback.style.display = 'inline';
-					setTimeout(function() { feedback.style.display = 'none'; }, 2000);
-				});
-			} else {
+			function fallbackCopy() {
 				textarea.select();
 				document.execCommand('copy');
 				feedback.style.display = 'inline';
 				setTimeout(function() { feedback.style.display = 'none'; }, 2000);
+			}
+			if ( navigator.clipboard && navigator.clipboard.writeText ) {
+				navigator.clipboard.writeText(textarea.value).then(function() {
+					feedback.style.display = 'inline';
+					setTimeout(function() { feedback.style.display = 'none'; }, 2000);
+				}).catch(function() {
+					fallbackCopy();
+				});
+			} else {
+				fallbackCopy();
 			}
 		});
 		</script>
