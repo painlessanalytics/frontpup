@@ -1,0 +1,100 @@
+# Lightsail Performance Guide
+
+This guide covers recommended server-side optimizations for WordPress sites hosted on an Amazon Lightsail instance, to be used alongside FrontPup and Amazon CloudFront. These changes improve browser and CDN caching, reduce origin load, and help your site achieve better PageSpeed/Lighthouse scores.
+
+## Enable the Apache `mod_expires` Module
+
+The Apache `mod_expires` module allows your server to send `Expires` and `Cache-Control: max-age` headers for static assets (images, CSS, JavaScript, fonts, etc.). This tells browsers and CloudFront how long they can cache a file before re-checking with the origin, which reduces repeat requests and speeds up page loads for returning visitors.
+
+### Steps
+
+1. **Connect to your Lightsail instance via SSH**
+   - In the [Lightsail console](https://lightsail.aws.amazon.com/), go to your instance.
+   - Select the **Connect** tab, then click **Connect using SSH** to open a browser-based terminal.
+   - Alternatively, connect from your local machine using the downloaded default key:
+     ```
+     ssh -i LightsailDefaultKey.pem bitnami@<your-instance-public-ip>
+     ```
+
+2. **Enable the module**
+   ```
+   sudo a2enmod expires
+   ```
+   > Note: If your instance uses the Bitnami WordPress stack, Apache is managed by Bitnami's helper scripts rather than `a2enmod`/`a2ensite`. If the command above returns "command not found," see [Bitnami note](#bitnami-stack-note) below.
+
+3. **Confirm (or add) the caching rules**
+   Check whether `mod_expires` directives already exist in your Apache or virtual host config (commonly `/etc/apache2/apache2.conf`, `/etc/apache2/sites-available/000-default.conf`, or `/opt/bitnami/apache2/conf/httpd.conf` on Bitnami). If they're missing, add a block like this inside the appropriate `<Directory>` or `<VirtualHost>` section:
+   ```apache
+   <IfModule mod_expires.c>
+       ExpiresActive On
+       ExpiresByType image/jpg "access plus 1 year"
+       ExpiresByType image/jpeg "access plus 1 year"
+       ExpiresByType image/png "access plus 1 year"
+       ExpiresByType image/gif "access plus 1 year"
+       ExpiresByType image/webp "access plus 1 year"
+       ExpiresByType image/svg+xml "access plus 1 year"
+       ExpiresByType image/x-icon "access plus 1 year"
+       ExpiresByType text/css "access plus 1 month"
+       ExpiresByType text/javascript "access plus 1 month"
+       ExpiresByType application/javascript "access plus 1 month"
+       ExpiresByType application/x-javascript "access plus 1 month"
+       ExpiresByType font/woff "access plus 1 year"
+       ExpiresByType font/woff2 "access plus 1 year"
+       ExpiresByType application/font-woff "access plus 1 year"
+       ExpiresByType text/html "access plus 0 seconds"
+   </IfModule>
+   ```
+
+4. **Test the configuration before restarting**
+   ```
+   sudo apachectl configtest
+   ```
+   You should see `Syntax OK`. If there are errors, fix them before proceeding so you don't take the site down.
+
+5. **Restart Apache**
+   ```
+   sudo systemctl restart apache2
+   ```
+   > On Bitnami stacks, use `sudo /opt/bitnami/ctlscript.sh restart apache` instead (see below).
+
+6. **Verify the headers are being sent**
+   From your local machine, check the response headers for a static asset:
+   ```
+   curl -I https://your-domain.com/wp-content/themes/your-theme/style.css
+   ```
+   Look for `Cache-Control` and/or `Expires` in the response.
+
+7. **Update your firewall/networking rules if needed**
+   Confirm your Lightsail instance's **Networking** tab still allows HTTP (80) and HTTPS (443) traffic before and after the restart — a restart itself won't change firewall rules, but it's worth a quick sanity check if the site becomes unreachable.
+
+### Bitnami Stack Note
+
+Many Lightsail "WordPress" blueprints run on the Bitnami stack, where Apache lives under `/opt/bitnami/apache2` and isn't managed by Debian's `a2enmod`/`a2ensite` tooling. On these instances:
+
+- `mod_expires` is typically already compiled in and just needs to be uncommented in `/opt/bitnami/apache2/conf/httpd.conf`:
+  ```
+  LoadModule expires_module modules/mod_expires.so
+  ```
+- Restart Apache with:
+  ```
+  sudo /opt/bitnami/ctlscript.sh restart apache
+  ```
+- Confirm which stack you're on with:
+  ```
+  sudo /opt/bitnami/ctlscript.sh status
+  ```
+  If this command doesn't exist, you're likely on a standard Ubuntu/Debian AMI and the `a2enmod`/`systemctl` instructions above apply directly.
+
+## Additional Recommendations
+
+- **Enable `mod_deflate` (gzip compression)** to reduce the size of text-based responses (HTML, CSS, JS) sent to browsers and CloudFront:
+  ```
+  sudo a2enmod deflate
+  sudo systemctl restart apache2
+  ```
+- **Set explicit `Cache-Control` headers via FrontPup** for HTML responses (`max-age`/`s-maxage`) so CloudFront and browsers cache pages appropriately, complementing the static-asset caching from `mod_expires`.
+- **Enable OPcache** for PHP to cache compiled PHP bytecode and reduce CPU load on the instance. On Bitnami, this is typically already enabled; verify with `php -i | grep opcache.enable`.
+- **Use a persistent object cache** (e.g., Redis) if your Lightsail plan and traffic warrant it, to reduce database load for dynamic pages.
+- **Right-size your Lightsail instance plan** — if CPU credits are frequently exhausted (visible in the Lightsail **Metrics** tab), consider upgrading your plan or moving to a burstable/unlimited bundle.
+- **Keep PHP, Apache/Bitnami, and WordPress core/plugins up to date** to benefit from ongoing performance and security improvements.
+- **Invalidate CloudFront cache after config changes** using FrontPup's Clear Cache option so cached responses reflect your new headers.
