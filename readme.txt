@@ -4,7 +4,7 @@ Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plu
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.6.1
+Stable tag: 1.7
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,13 @@ The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytic
 The FrontPup plugin is developed with assistance from [Kiro](https://kiro.dev), an AI-powered agentic IDE.
 
 Changelog
+
+ = 1.7 =
+
+ Add AsyncAws as a third CloudFront SDK option.
+
+ - Released: 2026-07-08
+ - Added "AsyncAws SDK" option to the Clear Cache SDK settings, a trimmed bundle of the AsyncAws CloudFront client for a smaller footprint than the Full AWS SDK
 
  = 1.6.1 =
 

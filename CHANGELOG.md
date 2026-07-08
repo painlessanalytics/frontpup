@@ -13,6 +13,13 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.7] - 2026-07-08
+
+Add AsyncAws as a third CloudFront SDK option.
+
+- Added "AsyncAws SDK" option to the Clear Cache SDK settings (`asyncaws/`), a Composer-built and then trimmed bundle containing only `async-aws/core` + `async-aws/cloud-front`'s `createInvalidation` support
+- Smaller footprint than the Full AWS SDK, but uses real independently-tested third-party code (SigV4 signing, credential chain) rather than FrontPup's hand-rolled Lightweight AWS SDK
+
 ## [1.6.1] - 2026-05-24
 
 WordPress 7.0 support.
