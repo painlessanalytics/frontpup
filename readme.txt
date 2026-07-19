@@ -137,10 +137,11 @@ Changelog
 
  = 1.7 =
 
- Add AsyncAws as a third CloudFront SDK option.
+ Add AsyncAws as a new CloudFront SDK option.
 
  - Released: 2026-07-08
  - Added "AsyncAws SDK" option to the Clear Cache SDK settings, a trimmed bundle of the AsyncAws CloudFront client for a smaller footprint than the Full AWS SDK
+ - NOTE: We will be removing the *Full AWS SDK* option in version 2.0. If you are using the full version please switch to the Lightweight AWS SDK or the AsyncAws SDK.
 
  = 1.6.1 =
 
