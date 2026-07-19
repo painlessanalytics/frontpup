@@ -87,8 +87,62 @@ class FrontPup_Clear_Cache {
       }
     }
 
-    // If full AWS SDK is enabled, use it. Otherwise, use the lightweight SDK.
-    if( !empty($this->settings['full_aws_sdk']) ) {
+    $sdk_mode = $this->settings['full_aws_sdk'] ?? '';
+
+    // Three SDK paths: the lightweight custom SigV4 client (default), the
+    // AsyncAws client (trimmed bundle), or the full AWS SDK for PHP.
+    if( $sdk_mode === 'asyncaws' ) {
+      /**
+       * Load the AsyncAws CloudFront client (trimmed bundle)
+       * ref: https://async-aws.com/clients/cloud-front.html
+       */
+      if ( !class_exists('AsyncAws\\CloudFront\\CloudFrontClient')) {
+        if( !file_exists( plugin_dir_path( __FILE__ ) . 'asyncaws/vendor/autoload.php' ) ) {
+          $this->set_last_error( __('The AsyncAws SDK is not available.', 'frontpup') );
+          return false;
+        }
+
+        // Lets load our version of the AsyncAws SDK
+        require_once plugin_dir_path( __FILE__ ) . 'asyncaws/vendor/autoload.php';
+      }
+
+      // Translate the shared $initOptions['credentials'] shape into AsyncAws's flat
+      // Configuration options. When no explicit credentials are set (policy mode),
+      // AsyncAws's own credential provider chain (env vars/ECS/IMDSv2/etc.) resolves them.
+      $asyncOptions = [ 'region' => $initOptions['region'] ];
+      if( !empty($initOptions['credentials']['key']) ) {
+        $asyncOptions['accessKeyId'] = $initOptions['credentials']['key'];
+        $asyncOptions['accessKeySecret'] = $initOptions['credentials']['secret'];
+        if( !empty($initOptions['credentials']['token']) ) {
+          $asyncOptions['sessionToken'] = $initOptions['credentials']['token'];
+        }
+      }
+
+      try {
+        $client = new AsyncAws\CloudFront\CloudFrontClient($asyncOptions);
+
+        $response = $client->createInvalidation([
+            'DistributionId' => $this->settings['distribution_id'],
+            'InvalidationBatch' => [
+                'CallerReference' => (string) time(),
+                'Paths' => [
+                    'Quantity' => count($paths),
+                    'Items' => $paths,
+                ],
+            ],
+        ]);
+
+        // AsyncAws responses resolve lazily; force resolution now so that any
+        // HTTP/auth error is thrown here instead of surfacing later (e.g. on
+        // object destruction) where it can no longer be caught.
+        $response->getInvalidation();
+        $this->result = $response;
+
+      } catch (\Throwable $e) {
+        $this->set_last_error( $e->getMessage() ?: 'Unknown error occurred creating invalidation.' );
+        return false;
+      }
+    } elseif( !empty($sdk_mode) ) {
       /**
        * Load AWS SDK (minimal)
        * ref: https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct

@@ -7,6 +7,9 @@
 .distignore
 .gitignore
 /aws/Aws/.gitignore
+/asyncaws/composer.json
+/asyncaws/composer.lock
+/asyncaws/README.md
 /.*
 /composer.json
 /composer.lock
