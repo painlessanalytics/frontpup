@@ -18,7 +18,7 @@ class FrontPup_Admin_Clear_Cache extends FrontPup_Admin_Base {
     'credentials_mode' => 'policy', // 'policy' or 'wpconfig' or 'database'
     'access_key_id' => '',
     'secret_access_key' => '',
-    'full_aws_sdk' => '',
+    'full_aws_sdk' => '', // '' (Lightweight AWS SDK), 'asyncaws' (AsyncAws SDK), or '1' (Full AWS SDK)
   ];
 
   protected $booleanFields = ['clear_cache_enabled', 'tag_based_caching_enabled'];

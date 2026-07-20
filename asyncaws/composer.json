@@ -1,0 +1,17 @@
+{
+    "name": "frontpup/asyncaws",
+    "description": "Minimal AsyncAws CloudFront client bundle for FrontPup",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "async-aws/cloud-front": "1.0.4",
+        "async-aws/core": "1.27.1",
+        "symfony/http-client": "^6.4"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1"
+        }
+    }
+}
