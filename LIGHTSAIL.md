@@ -85,13 +85,63 @@ Many Lightsail "WordPress" blueprints run on the Bitnami stack, where Apache liv
   ```
   If this command doesn't exist, you're likely on a standard Ubuntu/Debian AMI and the `a2enmod`/`systemctl` instructions above apply directly.
 
+## Enable gzip Compression (`mod_deflate`)
+
+The Apache `mod_deflate` module compresses text-based responses (HTML, CSS, JavaScript, JSON, SVG, etc.) before they leave the server. Smaller responses mean faster downloads for visitors and less data for CloudFront to pull from your origin.
+
+> The steps below are for the current native Lightsail "WordPress" blueprint, which runs on a standard Debian/Ubuntu Apache install (`apt`/`a2enmod`/`systemctl`). AWS is phasing out the older Bitnami-based blueprints in favor of these, so new instances should follow this path. If you're still on a Bitnami instance, see the [Bitnami note](#bitnami-stack-note) — `mod_deflate` is already compiled in and only needs to be uncommented in `httpd.conf`, following the same pattern shown there for `mod_expires`.
+
+### Steps (native/non-Bitnami blueprints)
+
+1. **Connect to your Lightsail instance via SSH** (see the [mod_expires steps](#steps) above).
+
+2. **Update your package index**
+   ```
+   sudo apt update
+   ```
+
+3. **Ensure Apache and `mod_deflate` are installed**
+   `mod_deflate` ships as part of the core `apache2` package, so a plain install (or reinstall) is all that's needed to make it available:
+   ```
+   sudo apt install apache2
+   ```
+
+4. **Enable the module**
+   ```
+   sudo a2enmod deflate
+   ```
+
+5. **Confirm (or add) the compression rules**
+   Check whether `mod_deflate` directives already exist (commonly in `/etc/apache2/mods-available/deflate.conf`, or your site's config under `/etc/apache2/sites-available/`). If they're missing, add a block like this:
+   ```apache
+   <IfModule mod_deflate.c>
+       AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+       AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+       AddOutputFilterByType DEFLATE application/json application/xml application/rss+xml
+       AddOutputFilterByType DEFLATE image/svg+xml
+       AddOutputFilterByType DEFLATE font/woff font/woff2 application/font-woff
+   </IfModule>
+   ```
+
+6. **Test the configuration before restarting**
+   ```
+   sudo apachectl configtest
+   ```
+   You should see `Syntax OK`. If there are errors, fix them before proceeding so you don't take the site down.
+
+7. **Restart Apache**
+   ```
+   sudo systemctl restart apache2
+   ```
+
+8. **Verify compression is working**
+   From your local machine, request a page with gzip explicitly accepted and confirm `Content-Encoding: gzip` is returned:
+   ```
+   curl -H "Accept-Encoding: gzip" -I https://your-domain.com/
+   ```
+
 ## Additional Recommendations
 
-- **Enable `mod_deflate` (gzip compression)** to reduce the size of text-based responses (HTML, CSS, JS) sent to browsers and CloudFront:
-  ```
-  sudo a2enmod deflate
-  sudo systemctl restart apache2
-  ```
 - **Set explicit `Cache-Control` headers via FrontPup** for HTML responses (`max-age`/`s-maxage`) so CloudFront and browsers cache pages appropriately, complementing the static-asset caching from `mod_expires`.
 - **Enable OPcache** for PHP to cache compiled PHP bytecode and reduce CPU load on the instance. On Bitnami, this is typically already enabled; verify with `php -i | grep opcache.enable`.
 - **Use a persistent object cache** (e.g., Redis) if your Lightsail plan and traffic warrant it, to reduce database load for dynamic pages.
