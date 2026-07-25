@@ -200,17 +200,6 @@ Resizing your instance to a larger bundle (more vCPU, RAM, and SSD) is the main 
 - You can only move **up** in plan size this way. To move to a smaller plan, take a manual snapshot, create a new smaller instance from it, re-point DNS, and delete the old instance once verified.
 - Vertical scaling has a ceiling — the largest Lightsail bundle — after which you need horizontal scaling or a move to EC2.
 
-### Horizontal Scaling
-
-Lightsail supports running multiple instances behind a **Lightsail Load Balancer**, but there's no equivalent to an EC2 Auto Scaling group — instances are added and removed manually, not automatically based on load.
-
-- Create additional instances (cloning your configured instance via a snapshot is the easiest way to keep them consistent).
-- Create a Lightsail Load Balancer and attach each instance as a target, with a health check path (e.g. `/`).
-- Because WordPress instances aren't stateless by default, horizontal scaling requires extra work first:
-  - **Shared uploads**: `wp-content/uploads` needs to live somewhere all instances can read/write — e.g., an offload plugin pointing at Amazon S3/Lightsail Object Storage, or a shared NFS mount — otherwise media uploaded on one instance won't appear on the others.
-  - **Shared database**: each instance must point at the same MySQL database (see below), not its own local copy.
-- Plan on manually monitoring load and adding/removing instances (or their Load Balancer registration) yourself as traffic changes.
-
 ### Move MySQL Off the Web Instance
 
 Running MySQL alongside Apache/PHP on the same instance means the database competes with your web server for CPU, RAM, and disk I/O. It's also a hard requirement for horizontal scaling, since multiple web instances can't share a database that's local to just one of them.
@@ -219,6 +208,19 @@ Running MySQL alongside Apache/PHP on the same instance means the database compe
 - **Dedicated Lightsail instance running only MySQL** — more manual maintenance, but cheaper for small workloads.
 
 Either way, the migration is the same shape: export your existing database (`mysqldump`), provision the new database, import the dump, update `DB_HOST` (and credentials) in `wp-config.php`, and confirm your instance's private networking/firewall rules allow it to reach the database on port 3306 before cutting over.
+
+### Horizontal Scaling
+
+Lightsail supports running multiple instances behind a **Lightsail Load Balancer**, but there's no equivalent to an EC2 Auto Scaling group — instances are added and removed manually, not automatically based on load.
+
+> **Prerequisite:** move MySQL off the web instance first (see above). Horizontal scaling means multiple web instances serving the same site, and they can't each keep their own local copy of the database — all of them need to point at one shared MySQL instance/managed database before you add a Load Balancer.
+
+- Create additional instances (cloning your configured instance via a snapshot is the easiest way to keep them consistent).
+- Create a Lightsail Load Balancer and attach each instance as a target, with a health check path (e.g. `/`).
+- Because WordPress instances aren't stateless by default, horizontal scaling requires extra work too:
+  - **Shared uploads**: `wp-content/uploads` needs to live somewhere all instances can read/write — e.g., an offload plugin pointing at Amazon S3/Lightsail Object Storage, or a shared NFS mount — otherwise media uploaded on one instance won't appear on the others.
+  - **Shared database**: each instance must point at the same MySQL database, not its own local copy.
+- Plan on manually monitoring load and adding/removing instances (or their Load Balancer registration) yourself as traffic changes.
 
 ### CDN: Lightsail's Built-in CDN vs. Amazon CloudFront (CloudFront Recommended)
 
