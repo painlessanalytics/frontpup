@@ -185,3 +185,65 @@ The Apache `mod_deflate` module compresses text-based responses (HTML, CSS, Java
 - **Right-size your Lightsail instance plan** — if CPU credits are frequently exhausted (visible in the Lightsail **Metrics** tab), consider upgrading your plan or moving to a burstable/unlimited bundle.
 - **Keep PHP, Apache/Bitnami, and WordPress core/plugins up to date** to benefit from ongoing performance and security improvements.
 - **Invalidate CloudFront cache after config changes** using FrontPup's Clear Cache option so cached responses reflect your new headers.
+
+## Scaling Options
+
+> **Note:** AWS is phasing out Bitnami-based Lightsail blueprints. Newer Lightsail "WordPress" instances are built on an **Amazon Linux**–based application blueprint rather than Bitnami's Debian/Ubuntu stack. On these instances, expect `yum`/`dnf` package management and no `/opt/bitnami` tree or `ctlscript.sh` helper — the `apt`/`a2enmod`/`systemctl` commands elsewhere in this guide apply directly, similar to the native/non-Bitnami steps above.
+
+Lightsail is intentionally simple, and that simplicity shapes how you scale. Below is the general progression, from simplest/cheapest to most involved.
+
+### Vertical Scaling (the primary way Lightsail scales)
+
+Resizing your instance to a larger bundle (more vCPU, RAM, and SSD) is the main scaling lever on Lightsail, and should be your first move when you see sustained CPU/memory pressure in the **Metrics** tab.
+
+- In the [Lightsail console](https://lightsail.aws.amazon.com/), open your instance, then use **Change plan** (found in the instance's menu) to move to a larger bundle. Lightsail can resize an existing instance in place — you don't need to recreate it.
+- You can only move **up** in plan size this way. To move to a smaller plan, take a manual snapshot, create a new smaller instance from it, re-point DNS, and delete the old instance once verified.
+- Vertical scaling has a ceiling — the largest Lightsail bundle — after which you need horizontal scaling or a move to EC2.
+
+### Horizontal Scaling
+
+Lightsail supports running multiple instances behind a **Lightsail Load Balancer**, but there's no equivalent to an EC2 Auto Scaling group — instances are added and removed manually, not automatically based on load.
+
+- Create additional instances (cloning your configured instance via a snapshot is the easiest way to keep them consistent).
+- Create a Lightsail Load Balancer and attach each instance as a target, with a health check path (e.g. `/`).
+- Because WordPress instances aren't stateless by default, horizontal scaling requires extra work first:
+  - **Shared uploads**: `wp-content/uploads` needs to live somewhere all instances can read/write — e.g., an offload plugin pointing at Amazon S3/Lightsail Object Storage, or a shared NFS mount — otherwise media uploaded on one instance won't appear on the others.
+  - **Shared database**: each instance must point at the same MySQL database (see below), not its own local copy.
+- Plan on manually monitoring load and adding/removing instances (or their Load Balancer registration) yourself as traffic changes.
+
+### Move MySQL Off the Web Instance
+
+Running MySQL alongside Apache/PHP on the same instance means the database competes with your web server for CPU, RAM, and disk I/O. It's also a hard requirement for horizontal scaling, since multiple web instances can't share a database that's local to just one of them.
+
+- **Lightsail Managed Database** — a separate managed MySQL instance with automated backups, patching, and an optional high-availability standby. This is the simplest path and keeps you fully within Lightsail.
+- **Dedicated Lightsail instance running only MySQL** — more manual maintenance, but cheaper for small workloads.
+
+Either way, the migration is the same shape: export your existing database (`mysqldump`), provision the new database, import the dump, update `DB_HOST` (and credentials) in `wp-config.php`, and confirm your instance's private networking/firewall rules allow it to reach the database on port 3306 before cutting over.
+
+### CDN: Lightsail's Built-in CDN vs. Amazon CloudFront (CloudFront Recommended)
+
+Lightsail offers its own **Content Delivery Network (CDN) distribution**, which is a simplified, wizard-driven layer on top of CloudFront. It's convenient to turn on, but trades away most of the control this guide (and FrontPup) relies on:
+
+- Fewer cache behaviors and less control over per-path caching rules
+- Limited header/cookie/query-string forwarding options
+- No access to CloudFront Functions/Lambda@Edge for edge logic
+- No support for multiple origins or the fine-grained cache/origin request policies CloudFront exposes directly
+- Not addressable through the CloudFront API the way FrontPup's cache invalidation relies on
+
+**Recommendation:** use an Amazon CloudFront distribution directly, as FrontPup is designed to do, rather than the Lightsail CDN option. This gives you full control over cache policies and behaviors, real invalidation via the API (what powers FrontPup's Clear Cache), custom origin/response headers, and room to add origins (e.g., an S3 bucket for static assets) later. If you're currently using the Lightsail CDN distribution, consider replacing it with a CloudFront distribution pointed at your instance as the origin, then managing it through FrontPup.
+
+### Next Step: Upgrade to EC2
+
+Once you've hit the ceiling on vertical scaling, and horizontal scaling on Lightsail feels too manual (no autoscaling, limited networking control, database still capped by Lightsail's managed database tiers), the natural next step is to move off Lightsail entirely using Lightsail's built-in **"Upgrade to EC2"** wizard.
+
+- From the [Lightsail console](https://lightsail.aws.amazon.com/), open your instance and choose **Upgrade to EC2** from the instance menu.
+- The wizard walks you through selecting a VPC, snapshotting your instance, and launching an equivalent EC2 instance from that snapshot — your instance's disk contents (including your WordPress install) carry over.
+- Moving to EC2 unlocks the full AWS compute ecosystem that Lightsail intentionally abstracts away:
+  - **EC2 Auto Scaling groups** and **Application/Network Load Balancers** for real automatic horizontal scaling
+  - A much wider selection of instance families/sizes (compute-, memory-, and burstable-optimized types)
+  - **Amazon RDS/Aurora for MySQL**, including read replicas, for the database tier
+  - **Amazon ElastiCache** for a dedicated object cache
+  - **Amazon EFS** for shared file storage across multiple web instances
+  - Full VPC control (subnets, security groups, NACLs) and access to Reserved/Spot pricing
+
+**Suggested order of operations:** scale vertically first (cheapest, least disruptive) → move MySQL to its own instance/managed database → add horizontal scaling with a Load Balancer if you still need more capacity → once Lightsail's ceiling is reached, use the Upgrade to EC2 wizard to unlock full autoscaling and managed AWS services.
