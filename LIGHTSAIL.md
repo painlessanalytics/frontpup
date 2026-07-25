@@ -45,6 +45,30 @@ The Apache `mod_expires` module allows your server to send `Expires` and `Cache-
    </IfModule>
    ```
 
+   **Alternative: `.htaccess`**
+   If you don't have access to the main Apache config, or your host's `<Directory>` block has `AllowOverride All` (or at least `AllowOverride FileInfo`) set for your WordPress root, you can add the same rules to the `.htaccess` file in your WordPress install directory instead:
+   ```apache
+   <IfModule mod_expires.c>
+       ExpiresActive On
+       ExpiresByType image/jpg "access plus 1 year"
+       ExpiresByType image/jpeg "access plus 1 year"
+       ExpiresByType image/png "access plus 1 year"
+       ExpiresByType image/gif "access plus 1 year"
+       ExpiresByType image/webp "access plus 1 year"
+       ExpiresByType image/svg+xml "access plus 1 year"
+       ExpiresByType image/x-icon "access plus 1 year"
+       ExpiresByType text/css "access plus 1 month"
+       ExpiresByType text/javascript "access plus 1 month"
+       ExpiresByType application/javascript "access plus 1 month"
+       ExpiresByType application/x-javascript "access plus 1 month"
+       ExpiresByType font/woff "access plus 1 year"
+       ExpiresByType font/woff2 "access plus 1 year"
+       ExpiresByType application/font-woff "access plus 1 year"
+       ExpiresByType text/html "access plus 0 seconds"
+   </IfModule>
+   ```
+   `.htaccess` changes take effect on the next request — no `apachectl configtest` or Apache restart is required. This is more convenient, but slightly slower per-request than server config since Apache re-reads `.htaccess` on every hit.
+
 4. **Test the configuration before restarting**
    ```
    sudo apachectl configtest
@@ -122,6 +146,19 @@ The Apache `mod_deflate` module compresses text-based responses (HTML, CSS, Java
        AddOutputFilterByType DEFLATE font/woff font/woff2 application/font-woff
    </IfModule>
    ```
+
+   **Alternative: `.htaccess`**
+   If you don't have access to the main Apache config, or your host's `<Directory>` block has `AllowOverride All` (or at least `AllowOverride FileInfo`) set for your WordPress root, you can add the same rules to the `.htaccess` file in your WordPress install directory instead:
+   ```apache
+   <IfModule mod_deflate.c>
+       AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+       AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+       AddOutputFilterByType DEFLATE application/json application/xml application/rss+xml
+       AddOutputFilterByType DEFLATE image/svg+xml
+       AddOutputFilterByType DEFLATE font/woff font/woff2 application/font-woff
+   </IfModule>
+   ```
+   `.htaccess` changes take effect on the next request — no `apachectl configtest` or Apache restart is required. The module itself (`mod_deflate`) still needs to be enabled server-side via `a2enmod deflate`; `.htaccess` only controls which rules are applied, not which modules are loaded.
 
 6. **Test the configuration before restarting**
    ```
