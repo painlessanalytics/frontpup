@@ -249,3 +249,13 @@ Once you've hit the ceiling on vertical scaling, and horizontal scaling on Light
   - Full VPC control (subnets, security groups, NACLs) and access to Reserved/Spot pricing
 
 **Suggested order of operations:** scale vertically first (cheapest, least disruptive) → move MySQL to its own instance/managed database → add horizontal scaling with a Load Balancer if you still need more capacity → once Lightsail's ceiling is reached, use the Upgrade to EC2 wizard to unlock full autoscaling and managed AWS services.
+
+### Scenarios
+
+Which of the above you actually need depends heavily on the type of site. A few common cases:
+
+- **Blog or podcast site.** Visitors aren't signed in and everyone sees the same content, so CloudFront can cache almost the entire site. Scaling here is primarily vertical, and a well-cached site relies on the CDN, not the origin, to absorb traffic. A 10,000-page site made up of largely static content shouldn't need to scale the origin at all if CloudFront caching is configured correctly — most requests should never reach the Lightsail instance.
+
+- **Membership site (1,000+ active members/month).** Logged-in members each get a personalized experience (account data, gated content, dashboards), so CloudFront caching doesn't help for most of the site — those responses are effectively unique per visitor and largely un-cacheable. Expect to need vertical scaling early, and horizontal scaling (with MySQL already moved off the web instance, per above) as active membership grows past what a single instance can serve.
+
+- **Online store / e-commerce site.** Expect to need both vertical and horizontal scaling, plus high availability for the web tier and the database tier — carts, checkout, and inventory can't tolerate a single point of failure the way a cacheable blog can. Any commerce site should plan a roadmap toward the EC2 ecosystem, where Auto Scaling and high availability (e.g., Multi-AZ RDS, an Application Load Balancer across multiple AZs) can be architected in from the start rather than bolted on later.
