@@ -3,8 +3,8 @@ Contributors: painlessanalytics, amandato
 Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 1.7
+Tested up to: 7.1
+Stable tag: 1.8
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,17 @@ The FrontPup plugin is maintained on GitHub [https://github.com/painlessanalytic
 The FrontPup plugin is developed with assistance from [Kiro](https://kiro.dev), an AI-powered agentic IDE.
 
 Changelog
+
+ = 1.8 =
+
+ Add IAM Policy Generator page.
+
+ - Released: 2026-08-31
+ - Tested with WordPress 7.1
+ - Added new "Policy Generator" submenu to generate a least-privilege IAM policy for CloudFront cache invalidation
+ - Accepts an AWS Account ID and optional Distribution ID (blank = wildcard for all distributions)
+ - Generated policy grants CreateInvalidation, GetInvalidation, and ListInvalidations actions
+ - Includes a copy-to-clipboard button and link to online instructions
 
  = 1.7 =
 

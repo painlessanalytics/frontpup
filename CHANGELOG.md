@@ -13,6 +13,16 @@ and this plugin adheres loosely to [Semantic Versioning](https://semver.org/).
 
 TBD
 
+## [1.8] - 2026-08-31
+
+Add IAM Policy Generator page.
+
+- Added new "Policy Generator" submenu under FrontPup admin menu
+- Generates a least-privilege IAM policy (JSON) that can be attached to a role or user to allow CloudFront cache invalidation
+- Accepts an AWS Account ID (required, 12 digits) and an optional Distribution ID; leaving the Distribution ID blank scopes the policy to all distributions in the account via a wildcard ARN
+- Generated policy grants `cloudfront:CreateInvalidation`, `cloudfront:GetInvalidation`, and `cloudfront:ListInvalidations`
+- Includes a copy-to-clipboard button with keyboard-accessible feedback and a link to online instructions
+
 ## [1.7] - 2026-07-19
 
 Add AsyncAws as a new CloudFront SDK option.
