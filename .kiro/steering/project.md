@@ -16,7 +16,7 @@ FrontPup is a WordPress plugin that integrates with AWS CloudFront to manage cac
 - Clear CloudFront cache (create invalidation) from the admin settings page or the admin bar
 - Non-intrusive admin bar "Clear CloudFront Cache" action using AJAX (no page reload)
 - Supports three AWS credential modes: IAM policy/role (`policy`), `wp-config.php` constants (`wpconfig`), or database-stored keys (`database`)
-- Two CloudFront SDK paths: a bundled lightweight custom implementation (default) and the full AWS SDK for PHP (optional)
+- Three CloudFront SDK paths: a bundled lightweight custom implementation (default), a trimmed AsyncAws bundle, and the full AWS SDK for PHP (all optional except the default)
 
 ## Directory Structure
 
@@ -41,7 +41,8 @@ includes/
   lightaws-cloudfront-wp.php   # LightAWS_CloudFront_WP
   lightaws-http-wp-trait.php  # LightAWS_HTTP_WP_Trait: optional WP HTTP API transport
 
-aws/                          # Full AWS SDK for PHP (optional, only loaded when full_aws_sdk enabled)
+asyncaws/                     # Trimmed AsyncAws CloudFront bundle (optional, only loaded when full_aws_sdk = 'asyncaws')
+aws/                          # Full AWS SDK for PHP (optional, only loaded when full_aws_sdk = '1')
 css/                          # Plugin stylesheets (admin-bar.css, etc.)
 js/                           # Plugin scripts (admin-bar.js)
 images/                       # Plugin images

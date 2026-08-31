@@ -1,17 +1,20 @@
 # FrontPup – AWS & CloudFront Integration
 
-## Lightweight vs Full AWS SDK
+## Lightweight vs AsyncAws vs Full AWS SDK
 
-FrontPup ships two paths for making CloudFront API calls:
+FrontPup ships three paths for making CloudFront API calls, selected by the `full_aws_sdk` setting in `frontpup_clear_cache`:
 
-| | Lightweight (default) | Full AWS SDK |
-|---|---|---|
-| Location | `includes/` | `aws/` |
-| Entry point | `LightAWS_CloudFront` | `Aws\CloudFront\CloudFrontClient` |
-| Loaded when | `full_aws_sdk` setting is empty/false | `full_aws_sdk` setting is truthy |
-| Autoloader | none needed | `aws/aws-autoloader.php` |
+| | Lightweight (default) | AsyncAws | Full AWS SDK |
+|---|---|---|---|
+| Location | `includes/` | `asyncaws/vendor/` | `aws/` |
+| Entry point | `LightAWS_CloudFront` | `AsyncAws\CloudFront\CloudFrontClient` | `Aws\CloudFront\CloudFrontClient` |
+| `full_aws_sdk` value | `''` | `'asyncaws'` | `'1'` |
+| Autoloader | none needed | `asyncaws/vendor/autoload.php` | `aws/aws-autoloader.php` |
+| Operations implemented | createInvalidation, getInvalidation, listInvalidations | createInvalidation only (upstream doesn't ship the other two) | full API |
 
-Always prefer the lightweight path for new CloudFront operations. Only fall back to the full SDK when the lightweight implementation cannot support a required API feature.
+Always prefer the lightweight path for new CloudFront operations. AsyncAws is a middle ground — real, independently-tested third-party code with a smaller footprint than the full SDK — for environments where the lightweight client's hand-rolled SigV4 signing doesn't work. Only fall back to the full SDK when neither of the other two can support a required API feature.
+
+The `asyncaws/` folder is a Composer-built bundle that was then manually trimmed (test suites, docs, and unused `symfony/http-client` transport integrations removed) — see `asyncaws/README.md` for exactly what was removed and how to rebuild it. Versions are pinned to the newest releases that still support PHP 8.1: `async-aws/core` 1.27.1, `async-aws/cloud-front` 1.0.4, `symfony/http-client` ^6.4. Unlike the lightweight path, the AsyncAws path uses AsyncAws's own credential provider chain (`AsyncAws\Core\Credentials\ChainProvider`) for `policy` mode instead of `LightAWS_Base::load_iam_credentials()`.
 
 ## Lightweight AWS Class Hierarchy
 
@@ -57,7 +60,7 @@ The `credentials_mode` setting in `frontpup_clear_cache` controls how AWS creden
 | `wpconfig` | `FRONTPUP_ACCESS_KEY_ID` + `FRONTPUP_SECRET_ACCESS_KEY` constants in `wp-config.php` | Keys outside the database |
 | `database` | `access_key_id` + `secret_access_key` stored in `frontpup_clear_cache` option | Least preferred |
 
-`LightAWS_Base::load_iam_credentials()` handles `policy` mode automatically. The `policy` credential chain order: env vars → ECS task endpoint → IMDSv2.
+`LightAWS_Base::load_iam_credentials()` handles `policy` mode automatically for the lightweight and full-SDK paths. The `policy` credential chain order: env vars → ECS task endpoint → IMDSv2. The AsyncAws path uses its own `ChainProvider::createDefaultChain()` instead (env vars → shared credentials/config files → ECS → IMDSv2 → web identity/SSO).
 
 ## Cache Invalidation Flow
 
@@ -68,6 +71,8 @@ FrontPup_AdminBar::wp_ajax_frontpup_clear_cache_action()
       → FrontPup_Clear_Cache::clear_cache()
         → (lightweight) new LightAWS_CloudFront( $initOptions )
                          →  createInvalidation( $distribution_id, ['/*'] )
+        → (asyncaws)    new AsyncAws\CloudFront\CloudFrontClient( $asyncOptions )
+                         →  createInvalidation( [...] )
         → (full SDK)    new Aws\CloudFront\CloudFrontClient( $initOptions )
                          →  createInvalidation( [...] )
 ```
@@ -82,5 +87,6 @@ CloudFront is a **global** service. SigV4 signing scope is always `us-east-1` re
 
 - `LightAWS_Base::set_last_error()` stores the message and throws `\Exception` by default (`$EXCEPTIONS_ENABLED = true`).
 - Call `LightAWS_Base::disable_exceptions(true)` to switch to a return-value error model and use `get_last_error()` / `get_last_error_code()` instead.
-- `FrontPup_Clear_Cache::clear_cache()` catches `\Exception` and returns `false` on failure; retrieve the message with `get_last_error()`.
+- `FrontPup_Clear_Cache::clear_cache()` catches `\Exception` (or `\Throwable` for the AsyncAws path) and returns `false` on failure; retrieve the message with `get_last_error()`.
 - HTTP 4xx/5xx responses are parsed for the CloudFront XML `<ErrorResponse><Error><Message>` envelope before surfacing the error string.
+- **AsyncAws only:** `AsyncAws\Core\Result` objects (e.g. `CreateInvalidationResult`) resolve their HTTP response lazily. `$client->createInvalidation(...)` returning does not mean the request succeeded — errors only surface the first time a getter is called on the result. `clear_cache()` calls `$response->getInvalidation()` inside its `try` block specifically to force this resolution before returning, otherwise failures would surface later (e.g. on object destruction) where they can no longer be caught.

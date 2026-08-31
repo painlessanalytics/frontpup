@@ -261,13 +261,43 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
           <input
             type="radio"
             name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
+            value="asyncaws"
+            <?php checked( isset( $settings['full_aws_sdk'] ) && $settings['full_aws_sdk'] === 'asyncaws' ); ?>
+          />
+          <?php echo esc_html__('AsyncAws SDK', 'frontpup'); ?>
+        </label>
+        <p>
+          <?php echo esc_html(__('AsyncAws is a community-maintained, independently tested AWS client library. This option bundles a trimmed copy containing only its CloudFront support, smaller than the Full AWS SDK but larger than the Lightweight AWS SDK.', 'frontpup')); ?>
+        </p>
+        <?php
+        if( class_exists('AsyncAws\\CloudFront\\CloudFrontClient') || file_exists( FRONTPUP_PLUGIN_PATH . 'asyncaws/vendor/autoload.php' ) )
+        {
+        ?>
+        <p style="margin-top: 16px;">
+          <span class="dashicons dashicons-yes"></span> <?php echo esc_html(__('The AsyncAws SDK was detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        } else {
+        ?>
+        <p style="margin-top: 16px;">
+          <span class="dashicons dashicons-no"></span> <?php echo esc_html(__('The AsyncAws SDK was NOT detected.', 'frontpup')); ?>
+        </p>
+        <?php
+        }
+        ?>
+        <br />
+
+        <label>
+          <input
+            type="radio"
+            name="<?php echo esc_attr($this->settings_key); ?>[full_aws_sdk]"
             value="1"
-            <?php checked( isset( $settings['full_aws_sdk'] ) && $settings['full_aws_sdk'] ); ?>
+            <?php checked( isset( $settings['full_aws_sdk'] ) && $settings['full_aws_sdk'] === '1' ); ?>
           />
           <?php echo esc_html__('Full AWS SDK', 'frontpup'); ?>
         </label>
         <p>
-          <?php echo esc_html(__('Use the full AWS SDK if the Lightweight AWS SDK fails for your environment.', 'frontpup')); ?>
+          <?php echo esc_html(__('Use the full AWS SDK if the other options fail for your environment.', 'frontpup')); ?>
         </p>
         <?php
         if( class_exists('Aws\\Sdk') )
@@ -286,7 +316,7 @@ define('FRONTPUP_SECRET_ACCESS_KEY', '&lt;YOUR-SECRET-ACCESS-KEY&gt;');
         }
         ?>
         <p style="margin-top: 16px;">
-          <?php echo esc_html(__('A simplified version of the AWS SDK will be used if the Full SDK cannot be found.', 'frontpup')); ?>
+          <?php echo esc_html(__('A simplified version of the AWS SDK will be used if the selected SDK cannot be found.', 'frontpup')); ?>
         </p>
       </fieldset>
     </td>
