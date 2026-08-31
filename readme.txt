@@ -3,7 +3,7 @@ Contributors: painlessanalytics, amandato
 Donate link: https://www.painlessanalytics.com/frontpup-cloudfront-wordpress-plugin/
 Tags: cloudfront, aws, cdn, amazon, lightsail
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 1.8
 Requires PHP: 8.1
 License: GPLv2 or later

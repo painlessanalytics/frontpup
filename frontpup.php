@@ -13,7 +13,7 @@
  * Description:       FrontPup, your CloudFront companion - Clear cache and optimize your CloudFront distribution for your WordPress website.
  * Version:           1.8
  * Requires at least: 6.0
- * Tested up to:      7.0
+ * Tested up to:      7.1
  * Requires PHP:      8.1
  * Author:            Painless Analytics
  * Author URI:        https://www.painlessanalytics.com
