@@ -140,6 +140,7 @@ Changelog
  Add IAM Policy Generator page.
 
  - Released: 2026-08-31
+ - Tested with WordPress 7.1
  - Added new "Policy Generator" submenu to generate a least-privilege IAM policy for CloudFront cache invalidation
  - Accepts an AWS Account ID and optional Distribution ID (blank = wildcard for all distributions)
  - Generated policy grants CreateInvalidation, GetInvalidation, and ListInvalidations actions
