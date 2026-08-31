@@ -124,7 +124,7 @@ $_distribution_id  = isset( $_POST['frontpup_distribution_id'] ) ? sanitize_text
 				<h2><?php esc_html_e( 'Generated IAM Policy', 'frontpup' ); ?></h2>
 				<button type="button" class="frontpup-copy-btn" id="frontpup-copy-btn"
 					title="<?php esc_attr_e( 'Copy to clipboard', 'frontpup' ); ?>">
-					<span class="dashicons dashicons-clipboard"></span>
+					<span class="dashicons dashicons-clipboard" aria-hidden="true"></span>
 					<?php esc_html_e( 'Copy', 'frontpup' ); ?>
 				</button>
 				<span class="frontpup-copy-feedback" id="frontpup-copy-feedback" style="display:none;"
